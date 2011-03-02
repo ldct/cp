@@ -12,7 +12,10 @@ ID: xuanji2
 #include <algorithm>
 #include <math.h>
 
-int fact(int n) {
+FILE *fin;
+FILE *fout;
+
+long long fact(int n) {
     return (n == 0) ? 1 : (n * fact(n-1));
 }
 
@@ -24,7 +27,7 @@ int indexof(std::vector<int> v, int elem) {
     }
 }
 
-int which(std::vector<int> p) {
+long long which(std::vector<int> p) {
     if (p.size() == 1)
         return 1;
     std::vector<int> ps = std::vector<int>(p);
@@ -34,22 +37,23 @@ int which(std::vector<int> p) {
     return (indexof(ps, pn) * fact(p.size())) + which(p);
 }
 
-void print(std::vector<int> p, int N, int n) {
+void print(std::vector<int> p, long long n) { //long long ok, long not ok
+    int N = (int) p.size();
     if (p.size() == 1) {
-        printf("%d ", p[0]);
+        fprintf(fout, "%d", p[0]);
         return;
-    } 
+    }
     std::sort(p.begin(), p.end());
-    int idx = ceil((double)n/(double)(N-1));
-    printf("%d ", p[idx-1]);
+    int idx = (int) ceil((double)n/(double)fact(N-1));
+    fprintf(fout, "%d ", p[idx-1]);
     p.erase(p.begin() + idx - 1);
-    print(p, N-1, n - fact(N-1)*(idx-1));
+    print(p, n - fact(N-1)*(idx-1));
 }
 
 int main() {
 
-    FILE *fin  = fopen("line.in", "r");
-    FILE *fout = fopen("line.out", "w");
+    fin  = fopen("line.in", "r");
+    fout = fopen("line.out", "w");
 
     int N,K;
     int i;
@@ -59,13 +63,13 @@ int main() {
         int j;
         fscanf(fin, "%c\n", &pq);
         if (pq == 'P') {
-            int p;
-            fscanf(fin, "%d\n", &p);
+            long long p;
+            fscanf(fin, "%lld\n", &p);
             std::vector<int> perm;
             for (j=0; j<N; j++) 
                 perm.push_back(j+1);
-            print(perm, N, p);
-            printf("\n");
+            print(perm, p);
+            fprintf(fout, "\n");
         }
         if (pq == 'Q') {
             std::vector<int> perm;
@@ -75,7 +79,7 @@ int main() {
                 perm.push_back(n);
             }
             fscanf(fin, "\n");
-            printf("%d\n", which(perm));
+            fprintf(fout, "%lld\n", which(perm));
         }
     }
     
