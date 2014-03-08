@@ -1,0 +1,18 @@
+#include <cstdio>
+#include <algorithm>
+
+#define MAX_N 100000
+int a[MAX_N];
+
+using namespace std;
+
+int main() {
+  int T;
+  scanf("%d", &T);
+
+  while (T-->0) {
+    int N, k;
+    scanf("%d %d", &N, &K);
+
+  }
+}
