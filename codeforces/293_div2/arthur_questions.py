@@ -10,6 +10,9 @@ raw_a = input().split(' ')
 a = ['?'] * N
 known_idxs = set()
 
+# if (N, K) == (99941, 52):
+#     print(' '.join(raw_a[500:600]))
+
 for i, e in enumerate(raw_a):
     if e != '?':
         a[i] = int(e)
@@ -25,10 +28,13 @@ def do_fix(aa, b, c, d, e, f = 1):
 
 def fix(start, end):
 
-    l = len(range(start, end, K))
-    # print("fixing", a[start:end+1:K], l)
+    # fix [start...end] with stride K
 
-    if l == 1 and a[start] == '?' and a[end] == '?':
+    # print(a[start:end+1:K])
+
+    l = len(range(start, end+1, K))
+
+    if l == 2 and a[start] == '?' and a[end] == '?':
         a[start] = 0
         a[end] = 1
         return
@@ -36,20 +42,22 @@ def fix(start, end):
     a_e = float('+inf') if a[end] == '?' else a[end]
     a_s = float('-inf') if a[start] == '?' else a[start]
 
-    if a_e - a_s < l:
+    left_0 = l - a_e - 2
+    right_0 = -1 - a_s
+
+    if (left_0 > right_0):
         fail()
     else:
-        left_0 = l - a_e - 1
-        right_0 = -1 - a_s
+        assert(left_0 <= right_0)
 
-        print(left_0, right_0)
+        L = l + (a[start] == '?') + (a[end] == '?')
+        opt_0 = (L - 2) // 2 - (a[start] == '?')
 
-        opt_0 = math.floor((l - 1.1) / 2)
         opt_0 = min(opt_0, right_0)
         opt_0 = max(opt_0, left_0)
 
         s = -opt_0
-        do_fix(start+K, end, K, s, s+l-1)
+        do_fix(start+K, end, K, s, s+l-2)
 
     # print("done middle", a[start:end+1:K])
 
