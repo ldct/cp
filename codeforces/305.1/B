@@ -1,0 +1,45 @@
+[Code here](https://github.com/zodiac/competitive-programming/blob/master/codeforces/305.1/B.py)
+
+~~~~~
+10
+1 2 3 4 5 4 3 2 1 6
+~~~~~
+
+(Note: I am numbering the bears from 0 to N-1, instead of 1 to N as in the editorial.)
+
+For each `i`, let `L[i]` be the index of the rightmost bear strictly to the left of bear `i` which is smaller than bear `i`. That is,
+
+- L[i] < i
+- A[L[i]] < A[i]
+- L[i] is maximal
+
+Similarly let `R[i]` be the index of the leftmost bear strictly to the right of bear `i` which is smaller than bear `i`. In the input for example,
+
+~~~~~
+   i:  0 1 2 3 4 5 6 7  8 9
+A[i]:  1 2 3 4 5 4 3 2  1 6
+L[i]: -1 0 1 2 3 2 1 0 -1 8
+R[i]: 10 8 7 6 5 6 7 8 10 10
+~~~~~
+
+For instance, since `L[5] = 2, R[5] = 6`, we know that `A[5]` is minimal in `A[3...5]`, because if we have `3 <= i <= 5` and `A[i] < A[5]`, then `L[5] >= i`. Hence the interval `A[3...5]` has strength `A[5]`. The length of the interval is 3. Hence there exists a size 3, strength 4 group.
+
+Also, this provides us with a size 2 strength 4 group, a size 1 strength 4 group, etc. We can store a table `strength[i]` that contains the answer (`strength[i]` = maximum strength about all groups of size `i`). For each `i`, we know there is a group of size `p = R[i] - L[i] - 1` of strength `A[i]`, and we update `strength[1...p]` accordingly. (To update `strength[i]` with a value `q`, we consider q as a candidate: `strength[i] = max(strength(i), q))`.
+
+Among all groups of strength 4 that include bear 5, `[3...5]` is the group with the largest size. Hence by looking at all values of `i` we have looked at all candidates.
+
+Optimization: instead of updating `streng[1...p]`, update `strength[p]` instead, and at the end do a rolling max.
+
+~~~~~
+          i: 1 2 3 4 5 6 7 8 9 10
+strength[i]: 6 0 4 0 3 0 2 0 0 1
+  answer[i]: 6 4 4 3 3 2 2 1 1 1
+~~~~~
+
+We calculate `L` by going through the array once and maintaining a stack of indices `L_candidates`. After calculating `L[i], L_candidates` should be all indices `j` to the left of `i` and with `A[j] < A[i]`. This is in an `L_candidates` list like
+
+~~~~~
+0 1 2 3 4 5
+~~~~~
+
+the 4 is useless; 4 can never be equal to `L[i]` for any `i` we consider after this point, because `A[4] > A[5]`. If 4 could be a `L[i]` then 5 would be an even better `L[i]`. Hence when considering `i=5`, we remove out all indices `j` such that `A[j] > A[5]`. Since `L_candidates` is always sorted with respect to `A`, we just remove from the right if possible. Once it is not possible, we have found the rightmost `j` such that `A[j] < A[i]`, so we can set `L[i] = j`.
