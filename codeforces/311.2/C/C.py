@@ -35,7 +35,7 @@ def cost_rkp(k, p):
 	# cheapest cost to remove k legs of length less than p
 	cc = 1
 	cost = 0
-	while (k > 0):
+	while (k > 0 and cc <= 200):
 		num_removable = min(num_kp(cc, p), k)
 		k -= num_removable
 		cost += num_removable * cc
@@ -47,6 +47,8 @@ def num_kp(c, p):
 	ls = length_l_d[c] # all lengths
 	i = 0
 	j = len_lld[c] - 1
+
+	# return len([_ls for _ls in ls if _ls < p])
 
 	if (j <= 1):
 		return len([_ls for _ls in ls if _ls < p])
@@ -91,12 +93,13 @@ while (i < N):
 	ntc_s = total_after_cutting - 2 * total_maximal + 1
 	ntc_s = max(0, ntc_s)
 
-	ctc_s = cost_rkp(ntc_s, length)
-
+	# ctc_s = cost_rkp(ntc_s, length)
+	ctc_s = 42
 
 	s.add(ctc_s + ctc_l)
 
-	# print('considering length', length, 'from', i, j, ctc_l, ctc_s)
+	if (length % 100 == 0):
+		print('considering length', length, 'from', i, j, ctc_l, ctc_s)
 	i = j + 1
 
 print(min(s))
