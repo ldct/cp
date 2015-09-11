@@ -29,16 +29,14 @@ for a, b in edges:
     mutual_neighbours = neighbours[a] & neighbours[b]
     if len(mutual_neighbours) == 0:
         continue
-    best_mn = sorted((degree[n], n) for n in mutual_neighbours)[-1][1]
+    best_mn = sorted((degree[n], n) for n in mutual_neighbours)[0][1] # smallest degree
     triplets.add((a, b, best_mn))
 
 def recognition(a, b, c):
     return degree[a] + degree[b] + degree[c] - 6
 
-print(triplets)
 if len(triplets) == 0:
     print(-1)
 else:
     mn_d = [recognition(*triplet) for triplet in triplets]
-    print(mn_d)
     print(min(mn_d))
