@@ -28,3 +28,9 @@ In fact, the pairing doesn't matter, we can reconstruct the painting using this 
 23 - stop
 
 which we constructed by putting "start" next to every segment LHS and "stop" next to every segment RHS and then sorting. Then Vika can start at 0, keep track of number of times current cell is to be painted = n = #(starts encounted so far) - #(stops encountered so far). Eg at position 2, n = 2, which means cell 2 was painted 2 times. Now each for each segment S in [0, 1), [1, 5), [5, 8) etc, all cells in S have the same n. Then we just add up the lengths of all segments for which n > 0.
+
+
+https://github.com/lamphanviet/competitive-programming/blob/master/light-online-judge/accepted-solutions/1120%20-%20Rectangle%20Union.cpp
+http://codeforces.com/blog/DanAlex
+http://zobayer.blogspot.sg/2013/11/various-usage-of-bit.html
+http://arxiv.org/pdf/1311.6093v4.pdf
