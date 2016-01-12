@@ -13,9 +13,11 @@ So to get both operations to O(log N), we take the second idea and deliberately 
 
 If we are to be able to recover sum(A[0:i]) for all i, then in our subset of pairs there must be a sequence (0, a_1), (a_1, a_2) ... (a_k, i).
 
-One way to enforce this constraint is to form a min-heap of the endpoint indices {O...N}, where if there is an edge from x -> y, then we store sum(A[x:y]). Then the cost of (2) is O(depth of min-heap), so to get O(log N) the heap should be balanced.
+One way to enforce this constraint is to form a min-heap of the endpoint indices {O...N}, where if there is an edge from x -> y, then we store sum(A[x:y]). 
 
-At this point we could continue trying to derive what heap to use, but it's simpler to think about why the Fenwick heap works:
+Suppose we store all pairs (a, b) such that a is a multiple of sqrt N and b - a <= sqrt N, as well as (0, a) where a is a multiple of sqrt N. Then the depth is two (the path to i is (0, k sqrt N), (k sqrt N, i)). Each operation takes sqrt N, which is still too much.
+
+The cost of (2) is O(depth of min-heap), so to get O(log N) the heap should be balanced. In the most balanced heap, each leaf is log N away from the root. Hence we try to ensure that for most leafs, the length of the edges on the path to root is 1, 2, 4, ...; since root is 0, this is only possible for some edges. But once we do this we get the heap
 
 http://codeforces.com/predownloaded/db/c7/dbc733901aa8c6b312d5677686422d35daaae8a0.png
 
