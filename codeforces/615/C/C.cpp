@@ -14,6 +14,8 @@ string S, T;
 
 map<string, pair<int, string>> memo;
 
+int numFinds = 0;
+
 pair<int, string> minCoatings(string s) {
 	// minimum-cost way to assemble T[start:] from substrings
 
@@ -21,34 +23,29 @@ pair<int, string> minCoatings(string s) {
 		return memo[s];
 	}
 
+	numFinds++;
 	if (substrings.find(s) != substrings.end()) {
 		return make_pair(1, s);
 	} else {
-		int retNum = 1000000;
-		string retStr = string("");
 
-		for (int i=1; i<s.size(); i++) {
+		for (int i=s.size(); i > 0; i--) {
+
 			string head = s.substr(0, i);
 			string tail = s.substr(i);
 
-			if (substrings.find(head) != substrings.end()) {
-				auto candidate = minCoatings(tail);
-				if (candidate.first != -1) {
-					if (1+candidate.first < retNum) {
-						retNum = 1+candidate.first;
-						retStr = head;
-					}
-				}
-			}
+			numFinds++;
+			if (substrings.find(head) == substrings.end()) continue;
+
+			auto candidate = minCoatings(tail);
+
+			if (candidate.first == -1) continue;
+
+			memo[s] = make_pair(1+candidate.first, head);
+			return memo[s];
+
 		}
 
-
-
-		if (retStr.size() == 0) {
-			memo[s] = make_pair(-1, retStr);
-		} else {
-			memo[s] = make_pair(retNum, retStr);			
-		}
+		memo[s] = make_pair(-1, "");
 		return memo[s];
 
 	}
@@ -91,9 +88,7 @@ int main () {
 
 	auto res = minCoatings(T);
 
-	cout << "memo.size: " << memo.size() << endl;
-
-	cout << "done c" << endl;
+	cout << "done c, numFinds=" << numFinds << endl;
 
 	vector<string> parts;
 
