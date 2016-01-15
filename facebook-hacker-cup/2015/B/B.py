@@ -25,10 +25,10 @@ def numWinning(N, arr, P):
 
 	for a in range(N):
 
-		for b in range(a+1, N+1):
-			if sumArr(a, b) <= P: 
-				ans += 1
-		continue
+		# for b in range(a+1, N+1):
+		# 	if sumArr(a, b) <= P: 
+		# 		ans += 1
+		# continue
 
 		# find largest b such that sum(arr[a:b]) <= P
 
@@ -68,5 +68,4 @@ for t in range(T):
 	N, P = int(N), int(P)
 	arr = [int(b) for b in input().split()]
 
-	# if t+1 != 3: continue
 	print("Case #" + str(t+1) + ": " + str(numWinning(N, arr, P)))
