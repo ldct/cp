@@ -4,15 +4,28 @@ import sys
 input()
 arr = list(input().split())
 
-ans = 1
-for s in arr:
-	if isBeautiful(s):
-		ans *= int(s, 2)
-	else:
-		nonBeautiful += [int(s, 10)]
+def isBeautiful(s):
+	if s[0] != '1': return False
+	for c in s[1:]:
+		if c != '0': return False
+	return True
 
-ans = format(ans, 'b')
-ans = int(ans, 10)
-for x in nonBeautiful:
-	ans *= x
-print(ans)
+logAns = 0
+nonBeautiful = None
+isZero = False
+
+for s in arr:
+	if s == "0":
+		isZero = True
+	if isBeautiful(s):
+		logAns += (len(s) - 1)
+	else:
+		nonBeautiful = s
+
+if isZero:
+	print(0)
+else:
+	if nonBeautiful is None:
+		nonBeautiful = '1'
+
+	print(nonBeautiful + '0'*logAns)
