@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def primes_upto(limit):
     is_prime = [False] * 2 + [True] * (limit - 1)
     for n in range(int(limit**0.5 + 1.5)): # stop at ``sqrt(limit)``
