@@ -3,7 +3,7 @@
 """
 factors = sieve()
 factors[9] = 3
-factors[10] = 2
+factors[10] = 5
 factors[11] = -1
 
 n       time    memory
@@ -16,6 +16,8 @@ def sieve(n=10**7):
         for j in range(i, n, i): 
             if j > i: s[j] = i
     return s
+
+print(sieve()[0:100])
 
 def primes(n=10**7):
     factors = sieve(n)
