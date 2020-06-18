@@ -94,10 +94,6 @@ def tree_ans():
 def ans():
 	dfs(1, 1, 0)
 
-	if (N, M, K) == (100000, 200000, 6):
-		print("-1")
-		return
-
 	if len(back_edges) == 0:
 		return tree_ans()
 
@@ -121,7 +117,7 @@ def ans():
 		for i, e in enumerate(cycle):
 			if i % 2 == 1:
 				IS += [e]
-		assert(len(IS) <= math.ceil(K / 2))
+		assert(len(IS) >= math.ceil(K / 2))
 		IS = IS[0:math.ceil(K / 2)]
 		print(1)
 		print(' '.join(map(str, IS)))
