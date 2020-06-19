@@ -22,6 +22,9 @@ class Graph:
             g.add_edge(i,i+1)
         return g
 
+    def add_directed_edge(self, u, v):
+        self.neighbours[u].add(v)
+
     def add_edge(self, u, v):
         self.neighbours[u].add(v)
         self.neighbours[v].add(u)
