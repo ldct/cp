@@ -14,14 +14,14 @@ class Sieve:
     def primes():
         return [i for i, e in enumerate(self.s) if e == -1 and i >= 2]
 
-    def fastfactorize(n):
-        assert(n <= self.n)
+    def fastfactorize(self, n):
+        assert(n <= self.N)
 
         ret = []
 
         while self.s[n] != -1:
             ret += [self.s[n]]
-            n /= self.s[n]
+            n = n // self.s[n]
 
         ret += [n]
 
