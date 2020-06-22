@@ -26,3 +26,13 @@ class Sieve:
         ret += [n]
 
         return ret
+
+    def factorize(self, n):
+        if n < self.N:
+            return self.fastfactorize(n)
+        
+        for p in self.PRIMES:
+            if n % p == 0:
+                return [p] + self.factorize(n // p)
+
+        return [n]
