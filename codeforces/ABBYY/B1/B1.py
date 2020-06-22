@@ -14,7 +14,6 @@ class Sieve:
         self.s = s
 
         self.PRIMES = self.primes()
-        # print(len(self.PRIMES))
     
     def primes(self):
         return [i for i, e in enumerate(self.s) if e == -1 and i >= 2]
@@ -68,5 +67,13 @@ class Sieve:
 
 sieve = Sieve()
 
-for _ in range(10**4):
-    assert(sieve.isprime(2**31-1))
+n = int(input())
+
+def ans(n):
+    f = sorted(sieve.factorize(n))
+    if len(f) == 1:
+        return n+1
+    else:
+        return n + ans(n // f[0])
+
+print(ans(n))
