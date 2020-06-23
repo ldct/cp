@@ -2,27 +2,29 @@
 
 using namespace std;
 
-constexpr size_t N = 10000000;
-
-vector<int>s;
-
-int main() {
-  
-  s = vector<int>(N, -1);
-
-  for (int i=2; i*i < N; i++) {
-    if (s[i] != -1) continue;
-    for (int j = i; j < N; j += i) {
-      if (j > i) s[j] = i;
+class Sieve {
+public:
+  vector<int> s;
+  Sieve(size_t N=1e7) {
+    s = vector<int>(N, -1);
+    s[0] = 0;
+    s[1] = 0;
+    for (int i=2; i*i < N; i++) {
+      if (s[i] != -1) continue;
+      for (int j = i; j < N; j += i) {
+        if (j > i) s[j] = i;
+      }
     }
   }
-
-  int count = 0;
-  for (int i=2;i<N;i++) {
-    if (s[i] == -1) count += 1;
+  int count_primes() {
+    int ret=0;
+    for (auto f : s) if (f == -1) ret += 1;
+    return ret;
   }
+};
 
-  cout << count << endl;
-  
+int main() {  
+  auto s = Sieve();
+  cout << s.count_primes() << endl;
   return 0;
 }

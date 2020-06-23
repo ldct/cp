@@ -3,7 +3,7 @@
 import math
 
 class Sieve:
-    def __init__(self, n=10**7):
+    def __init__(self, n=10**7+100):
         self.N = n
 
         s = [-1] * n
@@ -68,5 +68,7 @@ class Sieve:
 
 sieve = Sieve()
 
-for _ in range(10**4):
-    assert(sieve.isprime(2**31-1))
+SEMIPRIME = 10000019*10000079 # ~ 10^15
+
+for _ in range(10**2):
+    sieve.factorize(SEMIPRIME)
