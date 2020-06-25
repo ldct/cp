@@ -3,7 +3,7 @@
 using namespace std;
 
 constexpr size_t MAX_N = 2000001;
-constexpr long long MODULUS = (109 + 7);
+constexpr long long MODULUS = (1e9 + 7);
 
 long long memoT[MAX_N];
 long long memoF[MAX_N];
@@ -53,7 +53,7 @@ int main() {
   while (T --> 0) {
     int n;
     cin >> n;
-    cout << n << " " << max(ans(n, true), ans(n, false)) << endl;    
+    cout << " " << max(ans(n, true), ans(n, false)) << endl;    
   }  
   return 0;
 }

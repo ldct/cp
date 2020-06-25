@@ -9,12 +9,8 @@ from sys import stdin, stdout
 def input():
     return stdin.readline().strip()
 
-memoT = [-1]*(2*10**6+1)
-memoF = [-1]*(2*10**6+1)
-
-if True:
-    memoT = array.array('i', memoT)
-    memoF = array.array('i', memoF)
+memoT = array.array('i', [-1]*(2*10**6+1))
+memoF = array.array('i', [-1]*(2*10**6+1))
 
 def ans(i, disallow_occupy):
     if i <= 2: return 0
@@ -41,17 +37,5 @@ def ans(i, disallow_occupy):
         memoF[i] = max(choice1, choice2)
         return memoF[i]    
 
-for i in range(5, 2*10**6+1):
-    ans(i, True)
-    ans(i, False)
-
-import __pypy__
-
-print(__pypy__.strategy(memoT))
-
-# T = int(input())
-
-# for _ in range(T):
-#     N = int(input())
-
-#     print(max(ans(N, True), ans(N, False)))
+for i in range(5, 100):
+    print(f"{i} {ans(i, True)} {ans(i, False)}")
