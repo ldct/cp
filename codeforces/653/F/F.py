@@ -1,14 +1,54 @@
 #!/usr/bin/env pypy3
 
+class IndexingList:
+    from collections import defaultdict
+    def __init__(self, lst):
+        self.lst = lst
+        self.indexes = self.defaultdict(set)
+        for i, e in enumerate(self.lst):
+            self.indexes[e].add(i)
+    def __getitem__(self, k):
+        assert(isinstance(k, int))
+        return self.lst[k]
+    def __setitem__(self, k, v):
+        assert(isinstance(k, int))
+
+        old_v = self.lst[k]
+
+        self.indexes[old_v].remove(k)
+        self.indexes[v].add(k)
+        self.lst[k] = v
+    def __len__(self):
+        return len(self.lst)
+    def index(self, k):
+        s = self.indexes[k]
+        if len(s) == 0:
+            assert(False)
+        return next(iter(s))
+    def __repr__(self):
+        return self.lst.__repr__()
+    def __eq__(self, other):
+        if isinstance(other, IndexingList):
+            return self.lst == other.lst
+        elif isinstance(other, list):
+            return self.lst == other
+        assert(False)
+
+num_calls = 0
+
 def swaps(A):
+    global num_calls
+
     # assume A is a permutation of range(0, len(A))
 
+    A = IndexingList(A)
     ret = []
 
     for k in range(len(A)-1, 1, -1):
         assert(A.index(k) <= k)
         # print(f"putting {k} in the correct position")
         while A.index(k) < k:
+            num_calls += 1
             s = max(A.index(k)-1, 0)
             ret += [s]
             A[s], A[s+1], A[s+2] = A[s+2], A[s], A[s+1]
