@@ -59,6 +59,10 @@ def swaps(A):
 
     return [x+1 for x in ret]
 
+# timing code
+# swaps(list(range(2000))[::-1])
+# exit(0)
+
 def ans(A):
 
     seen = set()
