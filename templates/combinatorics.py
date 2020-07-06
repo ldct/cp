@@ -1,6 +1,5 @@
 from itertools import chain, combinations
 
-# todo: add lower and upper bounds
 def subsets(iterable, low=0, high=None):
     "subsets([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
