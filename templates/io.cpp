@@ -28,3 +28,11 @@ ostream& operator << (ostream& os, const set<T>& v) {
     os << "}";
 }
 */
+
+/*
+vector<int> py_slice(vector<int>& v, int skip) {
+  vector<int> ret;
+  for (int i=0; i<v.size(); i+=skip) ret.push_back(v[i]);
+  return ret;
+}
+*/

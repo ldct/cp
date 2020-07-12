@@ -1,52 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+template<class T> ostream& operator << (ostream& os, const vector<T>& v) { os << "["; for (int i=0; i<v.size(); i++) { os << v[i]; if (i < v.size() - 1) os << ", "; } return os << "]"; }
 template<class T> ostream& operator << (ostream& os, const set<T>& v) { os << "{"; for (const T& e : v) os << e << ", "; os << "}"; }
 
 constexpr size_t MAX_N = 500009;
 
-int T, N, A, B;
+long long T, N, A, B;
 int parent[MAX_N];
+vector<int> children[MAX_N];
 
-vector<int> path_to_root(int v) {
-  vector<int> ret;
+long long num_A[MAX_N];
+long long num_B[MAX_N];
 
-  while (v != 0) {
-    ret.push_back(v);
-    v = parent[v];
-  }
+void dfs(int u, vector<int>& ancestors) {
 
-  ret.push_back(v);
+  num_A[u] = 1;
+  num_B[u] = 1;
 
-  return ret;
-}
-
-vector<int> py_slice(vector<int>& v, int skip) {
-  vector<int> ret;
-  for (int i=0; i<v.size(); i+=skip) ret.push_back(v[i]);
-  return ret;
+  ancestors.push_back(u);
+  for (const auto& v : children[u]) dfs(v, ancestors);
+  
+  if (ancestors.size() >= A+1) num_A[ancestors[ancestors.size() - A - 1]] += num_A[u];
+  if (ancestors.size() >= B+1) num_B[ancestors[ancestors.size() - B - 1]] += num_B[u];
+  
+  ancestors.pop_back();
 }
 
 double ans() {
 
-  long long num_painted = 0;
+  vector<int> ancestors;
+  dfs(0, ancestors);
+
+  long long ans = 0;
 
   for (int u=0; u<N; u++) {
-    for (int v=0; v<N; v++) {
-      auto A_painted = path_to_root(u);
-      auto B_painted = path_to_root(v);
-
-      A_painted = py_slice(A_painted, A);
-      B_painted = py_slice(B_painted, B);
-
-      set<int> total;
-      total.insert(A_painted.begin(), A_painted.end());
-      total.insert(B_painted.begin(), B_painted.end());
-
-      num_painted += total.size();
-    }
+    ans += (num_A[u] + num_B[u])*N;
+    ans -= (num_A[u]*num_B[u]);
   }
-  return (double) num_painted / (N*N);
+
+  return (double) ans / (N*N);
 }
 
 int main() {
@@ -55,11 +48,20 @@ int main() {
   
   for (int t=1; t<=T; t++) {
     cin >> N >> A >> B;
-    for (int i=0; i<N-1; i++) {
-      cin >> parent[i+1];
-      parent[i+1]--; 
+
+    for (int i=0; i<N; i++) {
+      children[i].clear();
+      num_A[i] = num_B[i] = 0;     
     }
-    cout << "Case #" << t << ": " << setprecision(numeric_limits<double>::max_digits10) << ans() << endl;
+
+    for (int i=0; i<N-1; i++) {
+      int p;
+      cin >> p;
+      p--;
+      parent[i+1] = p;
+      children[p].push_back(i+1);
+    }
+    cout << "Case #" << t << ": " << setprecision(17) << ans() << endl;
   }
     
   return 0;
