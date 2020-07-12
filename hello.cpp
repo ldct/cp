@@ -1,13 +1,12 @@
 #include <bits/stdc++.h>
-
 using namespace std;
+
+int N;
 
 int main() {
   
-  int N;
-
-  scanf("%d", &N);
-  printf("%d\n", 2*N);
-  
+  cin >> N;
+  cout << N << endl;
+    
   return 0;
 }
