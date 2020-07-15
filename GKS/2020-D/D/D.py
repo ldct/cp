@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.setrecursionlimit(2000)
+
 def ans(S, K, difficulties):
 	return which(S-1, S-1, K, difficulties)+1
 
@@ -16,6 +19,16 @@ def which(i, j, x, difficulties):
 	if difficulties[i-1] < difficulties[j]: return which(i-1, j, x-1, difficulties)
 	return which(j+1, i, x-1, difficulties)
 	
+if False:
+	import random
+	for _ in range(100):
+		N = 1000
+		difficulties = [random.randint(1, 50) for _ in range(N-1)]
+		S = random.randint(1,N)
+		K = N
+		print(ans(S, K, difficulties))
+	exit(0)
+
 T = int(input())
 for t in range(T):
 	N, Q = input().split()
