@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env pypy3
 
 class Matrix(list):
     MODULUS=10**9+7
@@ -27,43 +27,38 @@ class Matrix(list):
         size = range(size)
         return Matrix([[(i==j)*1 for i in size] for j in size])
 
-K, M, N = input().split(' ')
-
-K = int(K)
-M = int(M)
+N, M, K = input().split(' ')
 N = int(N)
+M = int(M)
+K = int(K)
 
 adjacency = []
-for _ in range(K*K):
-    row = [0]*(K*K)
-    adjacency += [row]
+for _ in range(N):
+    adjacency += [[0]*N]
 
 for _ in range(M):
-    P, Q, R = input().split(' ')
-    P = int(P)
-    Q = int(Q)
-    R = int(R)
+    a, b = input().split(' ')
+    a = int(a)-1
+    b = int(b)-1
+    adjacency[a][b] = 1
 
-    P -= 1
-    Q -= 1
-    R -= 1
+if True:
+    import random
+    N = 100
+    K = 10**9
+    adjacency = []
+    for _ in range(N):
+        adjacency += [[random.choice([0, 1])]*N]
 
-    adjacency[P*K + Q][Q*K+R] = 1
+print("test generation done")
 
-if N == 1: 
-    print(1)
-elif N == 2:
-    print(adjacency[0][0])
-else:
-    adjacency = Matrix(adjacency)**(N-2)
 
-    ret = 0
+adjacency = Matrix(adjacency)**K
 
-    for p in [0]:
-        for q in range(K):
-            for r in range(K):
-                for s in [0]:
-                    ret += adjacency[p*K+q][r*K+s]
-                    ret = ret % Matrix.MODULUS
-    print(ret)
+ret = 0
+for i in range(N):
+    for j in range(N):
+        ret += adjacency[i][j]
+        ret %= Matrix.MODULUS
 
+print(ret)

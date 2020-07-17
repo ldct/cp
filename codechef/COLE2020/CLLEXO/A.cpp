@@ -47,6 +47,7 @@ int main() {
         m = min(m, string_data[x*M+y]);
       }
       cout << m;
+      // todo: test sorted vec
       set<pair<long long,long long>> next_frontier;
       for (const auto& p : frontier) {
         auto x = p.first;

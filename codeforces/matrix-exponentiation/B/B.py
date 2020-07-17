@@ -27,43 +27,9 @@ class Matrix(list):
         size = range(size)
         return Matrix([[(i==j)*1 for i in size] for j in size])
 
-K, M, N = input().split(' ')
+N = int(input())
 
-K = int(K)
-M = int(M)
-N = int(N)
+M = Matrix([[19, 6], [7, 20]])**N
+vec = M @ Matrix([[1], [0]])
 
-adjacency = []
-for _ in range(K*K):
-    row = [0]*(K*K)
-    adjacency += [row]
-
-for _ in range(M):
-    P, Q, R = input().split(' ')
-    P = int(P)
-    Q = int(Q)
-    R = int(R)
-
-    P -= 1
-    Q -= 1
-    R -= 1
-
-    adjacency[P*K + Q][Q*K+R] = 1
-
-if N == 1: 
-    print(1)
-elif N == 2:
-    print(adjacency[0][0])
-else:
-    adjacency = Matrix(adjacency)**(N-2)
-
-    ret = 0
-
-    for p in [0]:
-        for q in range(K):
-            for r in range(K):
-                for s in [0]:
-                    ret += adjacency[p*K+q][r*K+s]
-                    ret = ret % Matrix.MODULUS
-    print(ret)
-
+print(vec[0][0])
