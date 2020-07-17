@@ -1,15 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr size_t MAX_NM = 100000009;
+constexpr size_t MAX_NM = 10000009;
 
 long long N, M;
 char string_data[MAX_NM];
 long long memo[MAX_NM];
 
 bool possible(long long x, long long y) {
-  if (string_data[x*M+y] == '#') return false;
   if (x >= N || y >= M) return false;
+  if (string_data[x*M+y] == '#') return false;
   if (x == N-1 && y == M-1) return true;
 
   if (memo[x*M+y] != -1) return memo[x*M+y];
@@ -26,6 +26,7 @@ int main() {
   cin >> T;
   for (long long i=0; i<T; i++) {
     cin >> N >> M;
+    assert(N*M <= 10000000);
     for (long long j=0; j<N; j++) {
       for (long long k=0; k<M; k++) {
         char c;
