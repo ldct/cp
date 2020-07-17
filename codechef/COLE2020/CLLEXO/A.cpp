@@ -36,8 +36,8 @@ int main() {
       }
     }
 
-    set<pair<long long,long long>> frontier;
-    frontier.insert(make_pair(0,0));
+    vector<pair<long long,long long>> frontier;
+    frontier.push_back(make_pair(0,0));
 
     for (long long k=0; k<M+N-1; k++) {
       char m = 'z';
@@ -47,15 +47,17 @@ int main() {
         m = min(m, string_data[x*M+y]);
       }
       cout << m;
-      // todo: test sorted vec
-      set<pair<long long,long long>> next_frontier;
+      // NB: if frontier, next_frontier are replaced with std::set, it becomes about 3x slower
+      vector<pair<long long,long long>> next_frontier;
       for (const auto& p : frontier) {
         auto x = p.first;
         auto y = p.second;
         if (m != string_data[x*M+y]) continue;
-        if (possible(x+1,y)) next_frontier.insert(make_pair(x+1,y));
-        if (possible(x,y+1)) next_frontier.insert(make_pair(x,y+1));
+        if (possible(x+1,y)) next_frontier.push_back(make_pair(x+1,y));
+        if (possible(x,y+1)) next_frontier.push_back(make_pair(x,y+1));
       }
+      sort(next_frontier.begin(), next_frontier.end());
+      next_frontier.erase(unique(next_frontier.begin(), next_frontier.end()),next_frontier.end());
       frontier = next_frontier;
     }
     cout << endl;
