@@ -1,64 +1,79 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
-class Matrix(list):
+import array
+
+class SquareMatrix():
     MODULUS=10**9+7
-    def __matmul__(self, B) :
-        A = self
-        return Matrix([[sum(A[i][k]*B[k][j] for k in range(len(B))) % Matrix.MODULUS
-                    for j in range(len(B[0])) ] for i in range(len(A))])
+    def __init__(self, N):
+        self.N = N
+        self.storage = array.array('q', [0]*(N*N))
+        self.tmp = array.array('q', [0]*(N*N))
+    def rmul(self, B):
+        for i in range(N):
+            for j in range(N):
+                self.tmp[i*N+j] = 0
+                for k in range(N):
+                    self.tmp[i*N+j] += self.storage[i*N+k]*B.storage[k*N+j]
+                    self.tmp[i*N+j] %= SquareMatrix.MODULUS
+        self.storage, self.tmp = self.tmp, self.storage
+    def lmul(self, B):
+        for i in range(N):
+            for j in range(N):
+                self.tmp[i*N+j] = 0
+                for k in range(N):
+                    self.tmp[i*N+j] += B.storage[i*N+k]*self.storage[k*N+j]
+                    self.tmp[i*N+j] %= SquareMatrix.MODULUS
+        self.storage, self.tmp = self.tmp, self.storage
 
     def __pow__(self, n, modulus=None):
         assert(modulus is None)
 
-        result = Matrix.Identity(len(self))
+        result = SquareMatrix.Identity(self.N)
         b = self
         while n > 0:
             if (n%2) == 0:
-                b = b @ b
+                b.rmul(b)
                 n //= 2
             else:
-                result = b @ result
-                b = b @ b
+                result.lmul(b)
+                b.rmul(b)
                 n //= 2
         return result
 
     @classmethod  
     def Identity(cls, size):
-        size = range(size)
-        return Matrix([[(i==j)*1 for i in size] for j in size])
+        ret = SquareMatrix(N)
+        for i in range(N):
+            ret.storage[i*N+i] = 1
+        return ret
 
 N, M, K = input().split(' ')
 N = int(N)
 M = int(M)
 K = int(K)
 
-adjacency = []
-for _ in range(N):
-    adjacency += [[0]*N]
+adjacency = SquareMatrix(N)
 
 for _ in range(M):
     a, b = input().split(' ')
     a = int(a)-1
     b = int(b)-1
-    adjacency[a][b] = 1
+    adjacency.storage[a*N+b] = 1
 
-if True:
+if False:
     import random
     N = 100
     K = 10**9
-    adjacency = []
-    for _ in range(N):
-        adjacency += [[random.choice([0, 1])]*N]
+    adjacency = SquareMatrix(N)
+    for i in range(N*N):
+        adjacency.storage[i] = random.choice([0, 1])
 
-print("test generation done")
-
-
-adjacency = Matrix(adjacency)**K
+adjacency = adjacency**K
 
 ret = 0
 for i in range(N):
     for j in range(N):
-        ret += adjacency[i][j]
-        ret %= Matrix.MODULUS
+        ret += adjacency.storage[i*N+j]
+        ret %= SquareMatrix.MODULUS
 
 print(ret)
