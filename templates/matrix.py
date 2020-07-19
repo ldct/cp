@@ -1,6 +1,5 @@
 #!/usr/bin/env pypy3
 
-# 2D matrix over Z/(MODULUS) with binary exponentiation
 class Matrix(list):
     MODULUS=10**9+7
     def __matmul__(self, B) :
