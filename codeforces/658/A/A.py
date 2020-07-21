@@ -6,7 +6,16 @@ def input():
     return stdin.readline().strip()
 
 def ans(A, B):
-	print(A, B)
+	intersect = set(A) & set(B)
+
+	if len(intersect) == 0:
+		print("NO")
+		return
+
+	i = list(intersect)[0]
+
+	print("YES")
+	print(1, i)
 
 T = int(input())
 
