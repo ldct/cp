@@ -29,21 +29,15 @@ public:
   friend ostream& operator << (ostream& os, const SquareArray& s) {
 
     for (int i=0; i<s.N; i++) {
-      for (int j=0; j<s.N; j++) {
-        os << s.get(i, j) << "\t";
-      }
+      for (int j=0; j<s.N; j++) os << s.get(i, j) << "\t";
       os << endl;
     }
     return os;
   }
 
-  void set(int x, int y, numeric_t val) {
-   this->storage[x*N + y] = val;
-  }
+  void set(int x, int y, numeric_t val) { this->storage[x*N + y] = val; }
 
-  numeric_t get(int x, int y) const {
-   return this->storage[x*N + y];
-  }
+  numeric_t get(int x, int y) const { return this->storage[x*N + y]; }
 
  void rmul(const SquareArray* B) {
    for (int i=0; i<N*N; i++) tmp[i] = 0;
