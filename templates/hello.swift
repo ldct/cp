@@ -1,2 +1,2 @@
-import Swift
+import Foundation
 print("Hello, World!")
