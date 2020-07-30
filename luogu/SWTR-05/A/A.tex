@@ -1,0 +1,72 @@
+\listfiles
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{listings}
+
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\E}{E}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\Q{\mathbb{Q}}
+\def\K{\mathbb{K}}
+\def\T{\mathbb{T}}
+\def\B{\mathcal{B}}
+\def\XX{\mathfrak{X}}
+\def\YY{\mathfrak{Y}}
+\def\AA{\mathfrak{A}}
+\def\ZZ{\mathfrak{Z}}
+\def\BB{\mathcal{B}}
+\def\UU{\mathcal{U}}
+\def\MM{\mathcal{M}}
+\def\M{\mathfrak{M}}
+\def\l{\lambda}
+\def\L{\Lambda}
+\def\<{\langle}
+\def\>{\rangle}
+
+\usepackage[a4paper,margin=1in]{geometry}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1em}
+
+\title{Email Chain}
+\date{}
+
+\begin{document}
+\maketitle
+
+Little A has a grid of size $n \times m$ with a number written in each cell. For ease of description, let the cell in the top left corner be $(1,1)$ and the cell in the bottom right corner $(n,m)$.
+
+Little A can enter any of the cells in the bottommost (i.e., $n$th) row and play the game according to the following rules.
+
+1. Let the first time he enters row $i$ be $(i, r_i)$. If he is at cell $(i, r_i)$, then he can only move left or up. Otherwise he can move left, right or up.
+
+2. He cannot leave the grid, unless he is on the first row; leaving the grid from a cell in the first row ends the game.
+
+Define the score of a game as the sum of the numbers on all the squares through which Little A passes. Little A would like you to help him find the lowest score he can get.
+
+Input: the first lines contains $n, m$. The next $n$ lines contains $m$ integers, the values of the $i$th row.
+
+
+\subsection*{Subtask 1: $a_{i,j} \le 0$}
+
+For 3 points. The answer is the sum of all the $a_{i,j}$.
+
+\subsection*{Subtask 2: $n, m \le 5$}
+
+Brute force.
+
+\subsection*{Subtask 3: $n = 2$}
+
+We wish to select a subarray of the first row and a subarray of the second row such that their intersection is nonempty. We can do this by enumerating each point at which they must intersect (or we can enumerate the rightmost point the first subarray) and using prefix sum. In either case there are $O(m)$ candidates and the score of each candidate takes time $O(m)$ to compute.
+
+\subsection*{Subtask 4: $n, m \le 90$}
+
+
+\end{document}
