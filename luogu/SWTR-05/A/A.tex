@@ -35,7 +35,7 @@
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{1em}
 
-\title{Email Chain}
+\title{Grid}
 \date{}
 
 \begin{document}
@@ -64,9 +64,24 @@ Brute force.
 
 \subsection*{Subtask 3: $n = 2$}
 
-We wish to select a subarray of the first row and a subarray of the second row such that their intersection is nonempty. We can do this by enumerating each point at which they must intersect (or we can enumerate the rightmost point the first subarray) and using prefix sum. In either case there are $O(m)$ candidates and the score of each candidate takes time $O(m)$ to compute.
+We classify solutions by the rightmost selected cell of row 1. Fixing the index $i$ of rightmost selected cell, the solution consists of some subarray of the first row ending at $i$, some subarray of the second row ending at $i$, and some subarray of the second row begining at $i$; all these can be selected independently in $O(m)$ time by precomputing the prefix sum. Hence the total time is $O(m^2)$.
 
 \subsection*{Subtask 4: $n, m \le 90$}
 
+Let $f_{i,l,r}$ be the minimum sum of the first $i$ rows if, at the last row, we select $[l, r]$. We have the recurrence
+
+\[
+    f_{i,l,r} = \left( \min_{l \le x \le y \le r} f_{i-1,x,y} \right) + \sum_{j \in [l, r]} a_{ij}
+\]
+
+Time complexity: from now on assume $m=n$. There are $O(n^3)$ DP states (because there are 3 variables $i,l,r$) and each state depends on $O(n^2)$ other states (because of the enumeration over $x$ and $y$). Hence this is $O(n^5)$. To reduce it, we can precompute $f'_{i,r} = \min_l f_{i,l,r}$.
+
+\subsection*{Subtask 5: $n, m \le 400$}
+
+For every row our DP computes the answer if we select $l, r$ in the $i$th row. In subtask 4, after finishing the DP for a row, we precompute the optimum selection for fixed $r$, and use that to speed up the computation of the $i+1$st row. For this subtask, we can in addition precompute the optimum selection where $r \in [x, y]$ for each $x,y$. The preprocessing time per row increases to $O(n^2)$, but now the DP recurrence for the next row can be evaluated in $O(1)$. The total time complexity is $O(n^2)$.
+
+\subsection*{Subtask 6: $n, m \le 10^3$}
+
+Use the recurrence $f_{i,j} = min(f_{i, r-1} + a_{i,j}, f_{i-1,r} + v_{i,j})$ where $v_{i,j}$ is the smallest subarray of line $i$ ending at $j$.
 
 \end{document}

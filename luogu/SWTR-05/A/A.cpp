@@ -42,16 +42,20 @@ long long min_from(int x, int y) {
   return best;
 }
 
-long long best_from_mid(const int x, const int y, const int M) {
-  long long best_left = LLONG_MAX;
+long long best_left(const int x, const int y, const int M) {
+  long long ret = LLONG_MAX;
   for (int y_left=0; y_left<=y; y_left++) {
-    best_left = min(best_left, A_p[x][y] - A_p[x][y_left]);
+    ret = min(ret, A_p[x][y] - A_p[x][y_left]);
   }
-  long long best_right = LLONG_MAX;
+  return ret;
+}
+
+long long best_right(const int x, const int y, const int M) {
+  long long ret = LLONG_MAX;
   for (int y_right=y;y_right<M; y_right++) {
-    best_right = min(best_right, A_p[x][y_right+1] - A_p[x][y]);
+    ret = min(ret, A_p[x][y_right+1] - A_p[x][y]);
   }
-  return best_left+best_right;
+  return ret;
 }
 
 int main() {
@@ -90,7 +94,7 @@ int main() {
   if (N == 2) {
     long long best = LLONG_MAX;
     for (int y=0; y<M; y++) {
-      best = min(best, best_from_mid(0,y,M) + best_from_mid(1,y,M));
+      best = min(best, A[0][y] + best_left(0, y, M) + best_left(1, y, M) + best_right(1, y, M));
     }
     cout << best << endl;
     return 0;
