@@ -6,36 +6,51 @@ constexpr size_t MAX_NM = 2009;
 int N, M;
 char grid[MAX_NM][MAX_NM];
 
-long long memo[MAX_NM][MAX_NM];
+int memo[MAX_NM][MAX_NM];
 
-long long max_at(char c, int x, int y) {
+char opt_grid(int x, int y) {
+  if (!(0 <= x && x < N)) return '-';
+  if (!(0 <= y && y < M)) return '-';
+  return grid[x][y];
+}
+
+int max_at(int x, int y) {
   if (!(0 <= x && x < N)) return 0;
   if (!(0 <= y && y < M)) return 0;
-  if (grid[x][y] != c) return 0;
 
   if (memo[x][y] != -1) {
-    // cout << x << " " << y << " returning" << memo[x][y] << endl;
     return memo[x][y];
   }
 
+  char c = grid[x][y];
+  if (!(opt_grid(x, y-1) == c)) return 1;
+  if (!(opt_grid(x, y-2) == c)) return 1;
+  if (!(opt_grid(x-1, y-1) == c)) return 1;
+  if (!(opt_grid(x+1, y-1) == c)) return 1;
+
+
   memo[x][y] = 1+min(
     min(
-      max_at(c, x, y-1),
-      max_at(c, x, y-2)
+      max_at(x, y-1),
+      max_at(x, y-2)
     ),
     min(
-      max_at(c, x-1, y-1),
-      max_at(c, x+1, y-1)
+      max_at(x-1, y-1),
+      max_at(x+1, y-1)
     )
   );
-  // cout << x << " " << y << " setting" << memo[c-'a'][x][y] << endl;
 
   return memo[x][y];
 }
 
 int main() {
 
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+
   cin >> N >> M;
+
+  memset(memo, -1, sizeof(memo));
 
   for (int i=0; i<N; i++) {
     for (int j=0; j<M; j++) {
@@ -48,20 +63,16 @@ int main() {
 
   long long ret = 0;
 
-  for (char c = 'a'; c <= 'z'; c++) {
-
-    memset(memo, -1, sizeof(memo));
-
-    for (int i=0; i<N; i++) {
-      for (int j=0; j<M; j++) {
-        ret += max_at(c, i, j);
-      }
+  for (int i=0; i<N; i++) {
+    for (int j=0; j<M; j++) {
+      // cout << max_at(i, j) << '\t';
+      ret += max_at(i, j);
     }
+    // cout << endl;
   }
+  
 
   cout << ret << endl;
-
-
     
   return 0;
 }
