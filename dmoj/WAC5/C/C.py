@@ -30,8 +30,6 @@ count = 0
 for side in range(1, ub+1):
     square = side*side
 
-    # print("testing", side)
-
     c = Counter(B[:square])
     count += 1
     if ok(c, side):
