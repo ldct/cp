@@ -1,22 +1,63 @@
 #!/usr/bin/env pypy3
 
-import math
 from collections import Counter
+import array
 
-def ok(c, side):
-    if len(c) != side: return False
-    for k in c:
-        if c[k] != side: return False
-    return True
+class BCCounter:
+    def __init__(self, N=2*10**5+10):
+        self.N = N
+        self.freqs = [0]*N
+        self.freqfreqs = [0]*N
 
-input()
+        # self.freqfreqs[0] = N
 
-B = input().split()
-B = list(map(int, B))
+    def inc(self, idx):
+        f = self.freqs[idx]
+        # self.freqfreqs[f] -= 1
+        self.freqs[idx] += 1
+        # self.freqfreqs[f+1] += 1
 
+    def decr(self, idx):
+        f = self.freqs[idx]
+        # self.freqfreqs[f] -= 1
+        self.freqs[idx] -= 1
+        # self.freqfreqs[f-1] += 1
+
+    def nice_freqs(self):
+        r = dict()
+        for i in range(self.N):
+            if self.freqs[i] != 0:
+                r[i] = self.freqs[i]
+        return r
+
+    def nice_ff(self):
+        r = dict()
+        for i in range(self.N):
+            if self.freqfreqs[i] != 0:
+                r[i] = self.freqfreqs[i]
+        return r     
+
+    def num_nonzero(self):
+        return self.N - self.freqfreqs[0]
+
+    def check(self):
+        nn = 0
+        for i in range(len(self.freqs)):
+            assert(self.freqs[i] == self._counter[i])
+            if self._counter[i] != 0:
+                nn += 1
+        assert(nn == self.num_nonzero())
+
+import math
 if True:
     import random
-    B = [random.randint(1, 5) for _ in range(2*10**5)]
+    B = [random.randint(1, 2*10**5-10) for _ in range(2*10**5)]
+    ub = math.floor(math.sqrt(len(B)))
+else:
+    input()
+    B = input().split()
+    B = list(map(int, B))
+
 
 ret = 0
 
@@ -25,25 +66,27 @@ ub = math.floor(math.sqrt(len(B)))
 if max(B) <= 2:
     ub = 3
 
-count = 0
+def ok(c, side):
+    return True
+    return c.freqfreqs[side] == side
 
 for side in range(1, ub+1):
     square = side*side
+    # print("checking", square)
 
-    c = Counter(B[:square])
-    count += 1
+    c = BCCounter()
+    for b in B[:square]:
+        c.inc(b)
+
     if ok(c, side):
         ret += 1
 
     i = 0
     j = square
     while j < len(B):
-        c[B[i]] -= 1
-        if c[B[i]] == 0:
-            del c[B[i]]
-        c[B[j]] += 1
+        c.decr(B[i])
+        c.inc(B[j])
 
-        count += 1
         if ok(c, side):
             ret += 1
 
@@ -51,4 +94,3 @@ for side in range(1, ub+1):
         j += 1
 
 print(ret)
-print(count)
