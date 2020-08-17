@@ -1,6 +1,6 @@
 # python debugging
 """
-1. check that empty array of int is parsed correctyl
+1. check that empty array of int is parsed correctly
 2. check small int optimization
 3. check recursion limit (1000)
 """
