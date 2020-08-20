@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 // ported from SecondThread's Java code
-
-using namespace std;
 
 class SegTree {
 public:
@@ -12,7 +11,8 @@ public:
   int rightmost;
   long long sum;
 
-
+  // todo: ctor chaining
+  // SegTree(vector<long long>& a) { SegTree(a, 0, a.size()-1); }
   SegTree(vector<long long>&a, int _leftmost, int _rightmost) {
     leftmost = _leftmost;
     rightmost = _rightmost;
@@ -58,6 +58,7 @@ public:
     }
   }
 
+  long long rangeSum() { return sum; }
   long long rangeSum(int l, int r) {
     // entirely disjoint
     if (rightmost < l || r < leftmost) { return 0; }
