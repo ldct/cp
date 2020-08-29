@@ -2,7 +2,7 @@
 
 a, b, c, d, e, f = input().split()
 a = int(a)
-assert(a > 0)
+assert(a != 0)
 
 b = int(b)
 if a != b:

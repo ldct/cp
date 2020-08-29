@@ -7,19 +7,30 @@ from sys import stdin, stdout
 def input():
     return stdin.readline().strip()
 
-import operator as op
-from functools import reduce
+def bootstrap(f, stack=[]):
+    from collections import defaultdict
+    from types import GeneratorType
 
-def ncr(n, r):
-	if r > n: return 0
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
-	r = min(r, n-r)
-	numer = reduce(op.mul, range(n, n-r, -1), 1)
-	denom = reduce(op.mul, range(1, r+1), 1)
-	return numer // denom  # or / in Python 2
-
+@bootstrap
 def ans_seg(A):	
-	if len(A) == 0: return 0
+	if len(A) == 0: yield 0
 
 	option1 = len(A)
 	
@@ -28,10 +39,11 @@ def ans_seg(A):
 	for i in range(len(A)):
 		A[i] -= m
 
-	option2 = m + ans(A)
+	option2 = m + (yield ans(A))
 
-	return min(option1, option2)
+	yield min(option1, option2)
 
+@bootstrap
 def ans(A):
 
 	last_seg = []
@@ -47,14 +59,15 @@ def ans(A):
 	if len(last_seg):
 		segs += [last_seg]
 
-	return sum(ans_seg(seg) for seg in segs)
+	ret = 0
+	for seg in segs:
+		ret += yield ans_seg(seg)
+	yield ret
 
 N = int(input())
 S = list(map(int, input().split()))
 
 print(ans(S))
 
-for _ in range(1000):
-	import random
-	test_case = [random.randint(30, 40) for _ in range(50000)]
-	print(ans(test_case))
+# test_case = [i for i in range(1,5000)]
+# print(ans(test_case))
