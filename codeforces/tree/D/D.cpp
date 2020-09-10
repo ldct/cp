@@ -1,49 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/*
-todo(xuanji): do this problem and the next one with ETT
-*/
-
-/*
-for exp : 1 -> 20
-  for node
-    if node.lift[e-1]
-      node.lift[e] = node.lift[e-1].lift[e-1]
-*/
-
 constexpr size_t MAX_N = 300009;
 
-int N, Q;
-vector<int> neighbours[MAX_N];
+int N, M, Q;
+map<int, int> neighbours[MAX_N];
 int depth[MAX_N];
 int ancestor2[MAX_N][21];
+int weight2[MAX_N][21];
 
 void dfs(int u, int parent, int curr_depth) {
   depth[u] = curr_depth;
   ancestor2[u][0] = parent;
-  for (const auto& v : neighbours[u]) {
+  for (const auto& p : neighbours[u]) {
+    int v = p.first;
+    int w = p.second;
     if (v == parent) continue;
+    weight2[v][0] = w;
     dfs(v, u, curr_depth+1);
   }
 }
 
-int ancestor(int u, int n) {
+pair<int, int> ancestor(int u, int n) {
+  int w = INT_MAX;
   for (int e = 21; e >= 0; e--) {
-    if (u == -1) return u;
+    if (u == -1) return {u, w};
     if ((1 << e) <= n) {
       n -= (1 << e);
+      w = min(w, weight2[u][e]);
       u = ancestor2[u][e];
     }
   }
   assert(n == 0);
-  return u;
+  return {u, w};
 } 
 
 int lca(int u, int v) {
   if (depth[u] > depth[v]) return lca(v, u);
   assert(depth[u] <= depth[v]);
-  v = ancestor(v, depth[v] - depth[u]);
+  v = ancestor(v, depth[v] - depth[u]).first;
 
   for (int e=20; e>=0; e--) {
     if (u == v) return u;
@@ -57,32 +52,27 @@ int lca(int u, int v) {
   return ancestor2[u][0];
 }
 
-int query(int a, int b, int c) {
+int query(int a, int b) {
   int l = lca(a, b);
-
-  int up = min(depth[a] - depth[l], c);
-
-  c -= up;
-
-  if (c == 0) {
-    return ancestor(a, up);
-  }
-
-  int up2 = depth[b] - depth[l] - c;
-  if (up2 < 0) up2 = 0;
-
-  return ancestor(b, up2);
+  int aw = ancestor(a, depth[a] - depth[l]).second;
+  int bw = ancestor(b, depth[b] - depth[l]).second;
+  // cout << "a=" << a << "b=" << b << "l=" << l << endl;
+  // cout << "aw=" << aw << endl;
+  // cout << "bw=" << bw << endl;
+  return min(aw, bw);
 }
 
 int main() {
   
-  cin >> N;
+  cin >> N >> M;
+  assert(M == N-1);
+
   for (int i=0; i<N-1; i++) {
-    int u, v;
-    cin >> u >> v;
+    int u, v, w;
+    cin >> u >> v >> w;
     u--; v--;
-    neighbours[u].push_back(v);
-    neighbours[v].push_back(u);
+    neighbours[u][v] = w;
+    neighbours[v][u] = w;
   }
 
   dfs(0, -1, 0);
@@ -96,6 +86,7 @@ int main() {
     for (int u=0; u<N; u++) {
       if (ancestor2[u][e-1] != -1) {
         ancestor2[u][e] = ancestor2[ancestor2[u][e-1]][e-1];
+        weight2[u][e] = min(weight2[u][e-1], weight2[ancestor2[u][e-1]][e-1]);
       } else {
         ancestor2[u][e] = -1;
       }
@@ -103,11 +94,12 @@ int main() {
   }
 
   cin >> Q;
+
   while (Q --> 0) {
-    int a, b, c;
-    cin >> a >> b >> c;
+    int a, b;
+    cin >> a >> b;
     a--; b--;
-    cout << query(a, b, c) + 1 << endl;
+    cout << query(a, b) << endl;
   }
     
   return 0;
