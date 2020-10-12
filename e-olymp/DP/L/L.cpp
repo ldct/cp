@@ -1,3 +1,6 @@
+/*
+TAG: k-step fibonacci
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -12,6 +15,26 @@ constexpr int MAX_N = 1000009;
 int N, K;
 long long memo[MAX_N];
 
+long long modexp(long long b, long long e) {
+	long long ans = 1;
+	for (; e; b = b * b % MODULUS, e /= 2)
+		if (e & 1) ans = ans * b % MODULUS;
+	return ans;
+}
+
+long long F_slow(int n, int k) {
+  if (n < 0) return 0;
+  if (n == 0) return 1;
+
+  long long ret = 0;
+
+  for (int i=1; i<=k; i++) {
+    ret += F_slow(n-i, k);
+    ret %= MODULUS;
+  }
+  return ret;
+}
+
 long long F(int n, int k) {
   if (n < 0) return 0;
   if (n == 0) return 1;
@@ -19,30 +42,31 @@ long long F(int n, int k) {
 
   long long ret = 0;
   
-  if (n - k - 2 > 0) {
+  if (n - k - 1 >= 0) {
     memo[n] = ((2 * F(n-1, k)) % MODULUS - F(n - k - 1, k));
     memo[n] %= MODULUS;
     memo[n] += MODULUS;
     memo[n] %= MODULUS;
     return memo[n];
+  } else {
+    return memo[n] = modexp(2, n-1);
+    return memo[n] = F_slow(n, k);
   }
-
-  for (int i=1; i<=k; i++) {
-    ret += F(n-i, k);
-    ret %= MODULUS;
-  }
-  return memo[n] = ret;
 }
 
 int main() {
 
+  for (int i=0; i<MAX_N; i++) memo[i] = -1;
+
+  for (int n=0; n<10; n++) {
+    cout << "n=" << n << "\t" << F(n, 5) << endl;
+    assert(F(n, 5) == F_slow(n, 5));
+  }
+
+  // return 0;
+
   cin >> N >> K;
 
-  for (int i=0; i<=N+1; i++) memo[i] = -1;
-  if (N+1 - K <= 5) {
-    cout << -1 << endl;
-    return 0;
-  }
   cout << F(N+1, K) << endl;
 
   return 0;
