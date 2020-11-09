@@ -69,7 +69,7 @@ public:
   }
 };
 
-int main() { 
+int main() {
   int N, Q;
   cin >> N >> Q;
   vector<long long>A(N, 0);
@@ -91,3 +91,18 @@ int main() {
 
   return 0;
 }
+
+/// This is somewhat faster
+
+struct BIT {
+	vector<long long> s;
+	BIT(int n) : s(n) {}
+	void pointSet(int pos, long long dif) { // a[pos] += dif
+		for (; pos < s.size(); pos |= pos + 1) s[pos] += dif;
+	}
+	long long rangeSum(int pos) { // sum of values in [0, pos)
+		long long res = 0;
+		for (; pos > 0; pos &= pos - 1) res += s[pos-1];
+		return res;
+	}
+};
