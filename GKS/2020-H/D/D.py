@@ -18,26 +18,24 @@ alphabet = "abcdefghijklmnopqrstuvwxyz".upper()
 def label(c): return ord(c) - ord('A')
 
 def ans(names, queries):
-
-    V = len(names)
-
     g = []
-    for _ in range(V):
-        g += [[float("inf")]*V]
-    for i in range(V):
+    for _ in range(26):
+        g += [[float("inf")]*26]
+
+    for name in names:
+        chars = list(set(name))
+        for a in chars:
+            for b in chars:
+                i = label(a)
+                j = label(b)
+                g[i][j] = 1
+
+    for i in range(26):
         g[i][i] = 0
 
-    for i in range(V):
-        for j in range(i+1, V):
-            if len(set(names[i]) & set(names[j])) > 0:
-                g[i][j] = 1
-                g[j][i] = 1
-
-    # Floyd-Warshall
-
-    for k in range(V):
-        for i in range(V):
-            for j in range(V):
+    for k in range(26):
+        for i in range(26):
+            for j in range(26):
                 g[i][j] = min(
                     g[i][j] ,
                     g[i][k]+ g[k][j]
@@ -45,13 +43,22 @@ def ans(names, queries):
 
     ret = []
     for (i, j) in queries:
-        x = g[i-1][j-1]
-        if x == float("inf"):
-            ret += [-1]
-        else:
-            ret += [x+1]
+        n1 = names[i-1]
+        n2 = names[j-1]
 
-    return ' '.join(map(str, ret))
+        r = float("inf")
+        for a in set(n1):
+            for b in set(n2):
+                candidate = g[label(a)][label(b)]
+                r = min(r, candidate)
+
+        r += 2
+        if r == float("inf"):
+            r = -1
+
+        ret += [r]
+
+    return ' ' .join(map(str, ret))
 
 T = int(input())
 for t in range(T):
