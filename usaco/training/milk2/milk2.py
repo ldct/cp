@@ -28,7 +28,19 @@ def ans(lines):
 			nomilks += [(last, time)]
 		last = time
 
-	return nomilks
+	if len(nomilks) == 0:
+		return f"{max(ends) - min(starts)} 0"
+
+	start = min(starts)
+	milks = []
+
+	for [a, b] in nomilks:
+		milks += [(start, a)]
+		start = b
+
+	milks += [(b, max(ends))]
+
+	return f"{max(b - a for [a, b] in milks)} {max(b - a for [a, b] in nomilks)}"
 
 with open("milk2.in") as f:
 	with open("milk2.out", 'w') as fo:
@@ -37,4 +49,4 @@ with open("milk2.in") as f:
 		lines = [l.split() for l in lines]
 		lines = [tuple(map(int, l)) for l in lines]
 
-		print(ans(lines))
+		print(ans(lines), file=fo)
