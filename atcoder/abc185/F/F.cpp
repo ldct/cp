@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// ported from SecondThread's Java code
+template<class T1, class T2> ostream& operator << (ostream& os, const pair<T1,T2>& v) { return os << "(" << v.first << ", " << v.second << ")"; }
+template<class T> ostream& operator << (ostream& os, const vector<T>& v) { os << "["; for (int i=0; i<v.size(); i++) { os << v[i]; if (i < v.size() - 1) os << ", "; } return os << "]"; }
+template<class T> ostream& operator << (ostream& os, const set<T>& v) { os << "{"; for (const T& e : v) os << e << ", "; return os << "}"; }
+
 
 template<class Op, long long neutral>
 class SegTree {
@@ -66,9 +69,8 @@ public:
   }
 };
 
-
+int N, Q;
 int main() {
-  int N, Q;
   cin >> N >> Q;
   vector<long long>A(N, 0);
   for (int i=0; i<N; i++) {
@@ -76,31 +78,19 @@ int main() {
     cin >> a;
     A[i] = a;
   }
-  auto s = SegTree<plus<long long>, 0>(A, 0, A.size()-1);
+
+  auto x = SegTree<bit_xor<long long>, 0>(A);
+
   for (int i=0; i<Q; i++) {
-    int a, b, c;
-    cin >> a >> b >> c;
-    if (a == 0) {
-      s.pointIncrement(b, c);
+    long long T, X, Y;
+    cin >> T >> X >> Y;
+    X--; Y--;
+    if (T == 1) {
+      x.pointIncrement(X, Y+1);
     } else {
-      cout << s.rangeSum(b, c-1) << endl;
+      cout << x.rangeSum(X, Y) << endl;
     }
   }
 
   return 0;
 }
-
-/// This is somewhat faster
-
-struct BIT {
-	vector<long long> s;
-	BIT(int n) : s(n) {}
-	void pointSet(int pos, long long dif) { // a[pos] += dif
-		for (; pos < s.size(); pos |= pos + 1) s[pos] += dif;
-	}
-	long long rangeSum(int pos) { // sum of values in [0, pos)
-		long long res = 0;
-		for (; pos > 0; pos &= pos - 1) res += s[pos-1];
-		return res;
-	}
-};
