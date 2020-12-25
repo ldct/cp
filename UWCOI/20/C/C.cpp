@@ -1,9 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// ported from SecondThread's Java code
+template<class T1, class T2> ostream& operator << (ostream& os, const pair<T1,T2>& v) { return os << "(" << v.first << ", " << v.second << ")"; }
+template<class T> ostream& operator << (ostream& os, const vector<T>& v) { os << "["; for (int i=0; i<v.size(); i++) { os << v[i]; if (i < v.size() - 1) os << ", "; } return os << "]"; }
+template<class T> ostream& operator << (ostream& os, const set<T>& v) { os << "{"; for (const T& e : v) os << e << ", "; return os << "}"; }
 
-template<class Op, long long neutral>
+struct Max { long long operator()(long long x, long long y) const { return max(x, y); } };
+struct Min { long long operator()(long long x, long long y) const { return min(x, y); } };
+
+template<typename Op, long long neutral>
 class SegTree {
 public:
   unique_ptr<SegTree> lTree;
@@ -66,45 +71,46 @@ public:
   }
 };
 
-// If a maxtree/mintree is needed
-struct Max { long long operator()(long long x, long long y) const { return max(x, y); } };
-struct Min { long long operator()(long long x, long long y) const { return min(x, y); } };
-
+int T,N;
 
 int main() {
-  int N, Q;
-  cin >> N >> Q;
-  vector<long long>A(N, 0);
-  for (int i=0; i<N; i++) {
-    int a;
-    cin >> a;
-    A[i] = a;
-  }
-  auto s = SegTree<plus<long long>, 0>(A, 0, A.size()-1);
-  for (int i=0; i<Q; i++) {
-    int a, b, c;
-    cin >> a >> b >> c;
-    if (a == 0) {
-      s.pointIncrement(b, c);
-    } else {
-      cout << s.rangeSum(b, c-1) << endl;
+
+  cin >> T;
+
+  while (T --> 0) {
+    cin >> N;
+
+    vector<long long> idxs;
+
+    for (int i=0; i<N; i++) {
+      for (int j=0; j<N; j++) {
+        char pos;
+        cin >> pos;
+        assert(pos == '0' || pos == '1');
+        if (pos == '1') { idxs.push_back(j); }
+      }
     }
+
+    auto maxTree = SegTree<Max, LLONG_MIN>(idxs);
+    auto minTree = SegTree<Min, LLONG_MAX>(idxs);
+
+    long long ret = 0;
+    for (int i=0; i<N; i++) {
+      for (int j=i; j<N; j++) {
+        auto width = maxTree.rangeSum(i, j) - minTree.rangeSum(i, j);
+        if (width == (j - i)) {
+          ret++;
+        }
+      }
+    }
+
+    cout << ret << endl;
   }
+
+
+  // vector<long long> a = {0,1,2,3,4};
+  // auto s = SegTree<MyMax, LLONG_MIN>(a);
+  // cout << s.rangeSum(0, 2) << endl;
 
   return 0;
 }
-
-/// This is somewhat faster
-
-struct BIT {
-	vector<long long> s;
-	BIT(int n) : s(n) {}
-	void pointSet(int pos, long long dif) { // a[pos] += dif
-		for (; pos < s.size(); pos |= pos + 1) s[pos] += dif;
-	}
-	long long rangeSum(int pos) { // sum of values in [0, pos)
-		long long res = 0;
-		for (; pos > 0; pos &= pos - 1) res += s[pos-1];
-		return res;
-	}
-};
