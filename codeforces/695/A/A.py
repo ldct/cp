@@ -9,5 +9,18 @@ def read_int(): return int(input())
 
 ### CODE HERE
 
+S = "989"
+
+def ans(N):
+    ret = list(S[0:N])
+    d = 0
+    while len(ret) < N:
+        ret += [str(d)]
+        d += 1
+        d %= 10
+
+    return ''.join(ret)
+
 for _ in range(read_int()):
-    pass
+    N = read_int()
+    print(ans(N))
