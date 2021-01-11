@@ -73,7 +73,16 @@ def ans_slow(A):
 
     return ret
 
-for _ in range(read_int()):
-    input()
-    A = read_int_list()
-    print(ans(A))
+
+import random
+for _ in range(1):
+    N = random.randint(1, 50)
+    tc = [random.randint(1, 20) for _ in range(N)]
+    assert(ans(tc) == ans_slow(tc))
+    ans(tc)
+
+
+# for _ in range(read_int()):
+#     input()
+#     A = read_int_list()
+#     print(ans_slow(A))
