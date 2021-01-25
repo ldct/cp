@@ -87,7 +87,7 @@ public:
 
 };
 
-int main() { 
+int main() {
 
   long long N, K;
   cin >> N >> K;
@@ -142,7 +142,7 @@ int main() {
 
   adjacency.pow(K-N+1);
   cout << (adjacency*A)[0] << endl;
-  
+
   // cout << adjacency << endl;
 
   // cout << A << endl;
