@@ -1,4 +1,5 @@
 class DenseBlock:
+    """Explicitly stores all elements"""
     def __init__(self, block):
         self.block = block
     def getSum(self, l, r):
@@ -8,6 +9,10 @@ class DenseBlock:
         return len(self.block)
 
 class SumBlock:
+    """
+    Concatenation of two blocks
+    SumBlock(b1, b2) == b1+b2
+    """
     def __init__(self, b1, b2):
         self.b1 = b1
         self.b2 = b2
@@ -17,6 +22,9 @@ class SumBlock:
             return self.b1[i]
         else:
             return self.b2[i - len(self.b1)]
+
+    def toList(self):
+        return self.b1.toList() + self.b2.toList()
 
     def getSum(self, l, r):
         assert(0 <= l <= r <= len(self))
@@ -32,12 +40,19 @@ class SumBlock:
         return len(self.b1) + len(self.b2)
 
 class AllSameBlock:
+    """
+    Block where every element is the same
+    AllSameBlock(v, n) == [v]*n
+    """
     def __init__(self, val, count):
         self.val = val
         self.count = count
     def __getitem__(self, i):
         assert(0 <= i < self.count)
         return self.val
+    def toList(self):
+        return [self.val]*self.count
+
     def getSum(self, l, r):
         assert(0 <= l <= r <= len(self))
         return self.val * (r - l)
