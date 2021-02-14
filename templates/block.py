@@ -11,6 +11,13 @@ class SumBlock:
     def __init__(self, b1, b2):
         self.b1 = b1
         self.b2 = b2
+
+    def __getitem__(self, i):
+        if i < len(self.b1):
+            return self.b1[i]
+        else:
+            return self.b2[i - len(self.b1)]
+
     def getSum(self, l, r):
         assert(0 <= l <= r <= len(self))
         m = len(self.b1) - l
@@ -28,6 +35,9 @@ class AllSameBlock:
     def __init__(self, val, count):
         self.val = val
         self.count = count
+    def __getitem__(self, i):
+        assert(0 <= i < self.count)
+        return self.val
     def getSum(self, l, r):
         assert(0 <= l <= r <= len(self))
         return self.val * (r - l)
