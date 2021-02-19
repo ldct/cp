@@ -9,16 +9,15 @@ def read_int(): return int(input())
 
 ### CODE HERE
 
-input()
+def ans(L, R):
+    last = R - 2*L + 1
+    if last < 1: return 0
+    return (1 + last)*(last) // 2
+    # ret = 0
+    # for i in range(2*L, R+1):
+    #     ret += i - 2*L + 1
+    # return ret
 
-A = read_int_list()
-B = read_int_list()
-
-max_a = -1
-max_b = -1
-ret = -1
-for i in range(len(A)):
-    max_a = max(max_a, A[i])
-    max_b = max(max_b, B[i])
-    ret = max(ret, B[i]*max_a)
-    print(ret)
+for _ in range(read_int()):
+    L, R = read_int_tuple()
+    print(ans(L, R))
