@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
 from sys import stdin, stdout
 
@@ -12,66 +12,40 @@ from functools import lru_cache
 def cdiv(x, y):
     return x // y if x % y == 0 else x // y + 1
 
+from collections import Counter
+
 ### CODE HERE
 
-def p1_wins_sc(A):
-    for a in A:
-        assert(a > 0)
-
+def p1_wins(A):
+    if sum(A) == 0: return False
     if len(A) == 2: return A[0] != A[1]
 
-    mA = max(A)
-    piles = 0
-    for a in A:
-        if a == mA:
-            piles += 1
-
-    if piles % 2 == 1:
-        return True
-
-    return None
-
-@lru_cache(None)
-def p1_wins(A):
-    if len(A) == 0: return False
-    for a in A:
-        assert(a > 0)
-
-    r = p1_wins_sc(A)
-    if r is not None: return r
-
-    for k in range(1, max(A) + 1):
-        A_k = [a // k for a in A]
-        A_k = tuple(sorted([a for a in A_k if a > 0]))
-        for i in range(len(A_k)):
-            if A_k[i] > 0:
-                next_A = list(A_k)
-                next_A[i] -= 1
-                if not p1_wins(tuple(sorted(a for a in next_A if a > 0))):
-                    return True
+    cA = Counter(A)
+    for k in cA:
+        if k > 0 and cA[k] % 2 == 1:
+            return True
     return False
 
 def ans_slow(A):
     ret = 0
     for k in range(1, max(A) + 1):
         A_k = [a // k for a in A]
-        A_k = tuple(sorted([a for a in A_k if a > 0]))
         for i in range(len(A_k)):
             if A_k[i] > 0:
                 next_A = list(A_k)
                 next_A[i] -= 1
-                if not p1_wins(tuple(sorted(a for a in next_A if a > 0))):
+                if not p1_wins(tuple(next_A)):
                     # print("removing", k, "works", next_A)
                     ret += 1
     return ret
 
-if False:
+if True:
     input()
     A = read_int_tuple()
 else:
     import random
     A = [random.randint(1,20) for _ in range(20)]
 
-print(A)
+# print(A)
 print(ans_slow(A))
 # print(p1_wins.cache_info())
