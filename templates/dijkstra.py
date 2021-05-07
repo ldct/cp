@@ -1,5 +1,12 @@
 def dijkstra(n, graph, start):
-    """ Uses Dijkstra's algortihm to find the shortest path between in a graph. """
+    """
+    Uses Dijkstra's algortihm to find the shortest path between in a graph.
+    dijkstra(
+        3,
+        [[(1, 1), (2, 3)], [(2, 1)], []],
+        0
+    ) = [0, 1, 2]
+    """
     from heapq import heappop, heappush
 
     dist = [float("inf")] * n
