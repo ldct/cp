@@ -18,6 +18,7 @@ ll crt(ll a, ll m, ll b, ll n) {
 }
 
 ll intersect(ll a, ll b, ll c, ll d) {
+  // find r such that aZ + b cap cZ + d = lcm(a, c)Z + r
   if ((b - d) % gcd(a, c) != 0) return -1;
   return crt(b,a,d,c);
 }
