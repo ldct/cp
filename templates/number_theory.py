@@ -33,3 +33,20 @@ def modinv(a, m):
 def count_multiples(A, B, c):
     # number of multiples of c in [A, B]
     return B//c - (A-1)//c
+
+def divisors(n):
+    large_divisors = []
+    for i in range(1, int(math.sqrt(n) + 1)):
+        if n % i == 0:
+            yield i
+            if i*i != n:
+                large_divisors.append(n / i)
+    for divisor in reversed(large_divisors):
+        yield divisor
+
+def s0(n):
+    ret = 0
+    for d in range(1,n+1):
+        if n%d == 0:
+            ret += 1
+    return ret
