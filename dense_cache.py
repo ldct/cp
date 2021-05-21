@@ -11,3 +11,16 @@ def dense_cache(func):
         return result
 
     return memoized_func
+
+# for GCJ pypy2
+
+def memoize(function):
+  memo = {}
+  def wrapper(*args):
+    if args in memo:
+      return memo[args]
+    else:
+      rv = function(*args)
+      memo[args] = rv
+      return rv
+  return wrapper
