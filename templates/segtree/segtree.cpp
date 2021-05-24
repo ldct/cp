@@ -80,7 +80,7 @@ int main() {
     cin >> a;
     A[i] = a;
   }
-  auto s = SegTree<plus<long long>, 0>(A, 0, A.size()-1);
+  auto s = SegTree<plus<long long>, 0>(A);
   for (int i=0; i<Q; i++) {
     int a, b, c;
     cin >> a >> b >> c;
