@@ -15,7 +15,7 @@ for _ in range(T//4):
     G = random.randint(5, 95)
     G = random.randint(50, 50)
     W = 10*G
-    # for E in [0]*4:
+    # for E in [W//10]*4:
     for E in [W, W//2, W//10, 0]:
         days += [(W, E)]
         S += f"{W} {E}\n"

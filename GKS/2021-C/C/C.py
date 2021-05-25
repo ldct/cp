@@ -22,11 +22,24 @@ def read_int(): return int(input())
 
 import random
 
+# 240 -> 247 -> 276
 def ans(W, E):
-    if E == 0: return 'R'*22 +'S'*(60-22)
-    if E == W//10: return 'R'*22 +'S'*(60-22)
-    if W == E: return 'RSP'*20
-    if E == W//2: return 'RSP'*20
+    if E == 0:
+        return 'SPPPPPPPPPRRRRRRRRRRRRRRRRRRRRRRRRRRRSSSSSSSSSSSSSSSSSSSSSSS' # 237
+        return 'R'*22 +'S'*(60-22) # 189
+        return 'R'*30 +'S'*(60-30) # 178
+
+    if E == W//2:
+        return 'SPPRRRRSSSSSSSSPPPPPPPPPPPPPPPPRRRRRRRRRRRRRRRRRRRSSSSSSSSSS' # 278
+        return 'RSP'*20 # 264
+
+    if W == E:
+        return 'RSP'*20 # 346
+
+    if E == W//10:
+        return 'SPPPPRRRRRRRRRRRRRRRSSSSSSSSSSSSSSSSSSSSSSSSSPPPPPPPPPPPPPPP' # 242
+        return 'SPPPPPPPPPRRRRRRRRRRRRRRRRRRRRRRRRRRRSSSSSSSSSSSSSSSSSSSSSSS' # 242
+        return 'R'*22 +'S'*(60-22) # 189
 
 T = read_int()
 X = read_int()
