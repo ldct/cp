@@ -9,23 +9,29 @@ def read_int(): return int(input())
 
 ### CODE HERE
 
-def rightmost(A, B):
-    for j in range(len(A)-1, -1, -1):
-        if B[j] < A[j]: return j
-
-def leftmost(A, i, cap):
-    for k in range(i, -1, -1):
-        if A[k] <= cap:
-            return k
-
 def ans(B):
     A = list(range(1, len(B) + 1))
+
+    T = len(A)-1
+    def rightmost(A, B):
+        nonlocal T
+        for j in range(T, -1, -1):
+            if B[j] < A[j]:
+                T = j
+                return T
+
+    U = len(A)
+    def leftmost(A, i, cap):
+        nonlocal U
+        U = min(U, i)
+        for k in range(U, -1, -1):
+            if A[k] <= cap:
+                return k
 
     ret = 0
 
     while True:
-        # print(B)
-        # print(A)
+        # print(A, B, T)
 
         j = rightmost(A, B)
         if j is None: return ret
@@ -33,9 +39,10 @@ def ans(B):
         i = leftmost(A, j, B[j])
         if i is None: return -1
 
-        for t in range(i, j):
-            ret += 1
-            A[t], A[t+1] = A[t+1], A[t]
+        del A[i]
+        ret += (j-i)
+
+        T -= 1
 
     return ret
 

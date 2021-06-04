@@ -24,7 +24,7 @@ vector<int> children[200009];
 map<int, int> queries_at_node[200009];
 vector<pair<int, int>> queries;
 int depth[200009];
-map<int, int>* descendents[200009];
+map<int, int> descendents[200009];
 
 void dfs0(int u, int d) {
   depth[u] = d;
@@ -37,40 +37,24 @@ void dfs(int u) {
     dfs(v);
   }
 
-  map<int, int>* largest = descendents[u];
-
   for (auto v : children[u]) {
-    if (!largest) {
-      largest = descendents[v];
-    } else {
-      if (descendents[v]->size() > largest->size()) {
-        largest = descendents[v];
-      }
+    if (descendents[v].size() > descendents[u].size()) {
+      swap(descendents[u], descendents[v]);
     }
   }
 
   for (auto v : children[u]) {
-    if (descendents[v] == largest) continue;
-    // merge descendents[v] into largest
-    for(auto it = (*descendents[v]).cbegin(); it != (*descendents[v]).cend(); ++it) {
+    // merge descendents[v] into descedents[u]
+    for(auto it = (descendents[v]).cbegin(); it != (descendents[v]).cend(); ++it) {
       // cout << it->first << endl;
-      (*largest)[it->first] += it->second;
+      (descendents[u])[it->first] += it->second;
     }
   }
-
-  if (descendents[u] != largest) {
-    // merge descendents[u] into largest
-    for(auto it = (*descendents[u]).cbegin(); it != (*descendents[u]).cend(); ++it) {
-      (*largest)[it->first] += it->second;
-    }
-  }
-
-  descendents[u] = largest;
 
   // cout << "answering query " << u << " " << (*descendents[u]) << endl;
 
   for (auto d : queries_at_node[u]) {
-    int ans = (*descendents[u])[d.first];
+    int ans = (descendents[u])[d.first];
     queries_at_node[u][d.first] = ans;
   }
 }
@@ -78,8 +62,6 @@ void dfs(int u) {
 int main() {
 
   cin >> N;
-
-  for (int i=0; i<N; i++) descendents[i] = new map<int, int>();
 
   for (int i=1; i<N; i++) {
     int p;
@@ -91,7 +73,7 @@ int main() {
   dfs0(0, 0);
 
   for (int i=0; i<N; i++) {
-    (*(descendents[i]))[depth[i]] = 1;
+    descendents[i][depth[i]] = 1;
   }
 
   cin >> Q;
