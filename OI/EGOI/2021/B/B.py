@@ -11,62 +11,79 @@ from collections import defaultdict
 
 ### CODE HERE
 
-def solve(A):
-    A = A[:]
-    indexes = defaultdict(list)
-    for i, a in enumerate(A):
-        indexes[a] += [i]
+class Query:
+    def __init__(self, l, r, idx):
+        self.l = l
+        self.r = r
+        self.idx = idx
+        self.ans = None
+    def __repr__(self):
+        return f"({self.l}, {self.r}, {self.idx}, {self.ans})"
 
-    for a in indexes:
-        indexes[a] = sorted(indexes[a])
+def update(idx, val, bit, n):
+    while idx <= n:
+        bit[idx] += val
+        idx += idx & -idx
 
-    best_gap = float("inf")
+# querying the bit array
+def bit_query(idx, bit, n):
+    summ = 0
+    while idx:
+        summ += bit[idx]
+        idx -= idx & -idx
+    return summ
 
-    for a in indexes:
-        [i, j] = indexes[a]
-        best_gap = min(best_gap, j-i)
+def answerQueries(arr, queries):
+    queries.sort(key = lambda x: x.r)
 
-    for a in indexes:
-        [i, j] = indexes[a]
-        if j-i == best_gap:
-            cost = j-i
-            del A[j]
-            del A[i]
-            return cost, A
+    MAX = max(arr)+1
+    n = len(arr)
+    q = len(queries)
 
-def ans_slow(A):
-    ret = 0
-    while len(A):
-        cost, A = solve(A)
-        ret += cost
-    return ret
+    bit = [0] * (n + 1)
+    last_visit = [-1] * MAX
 
-def cost(elems):
-    freq = defaultdict(int)
-    for e in elems:
-        freq[e] += 1
-        freq[e] %= 2
-    ret = 0
-    for k in freq:
-        ret += freq[k]
-    return ret
+    query_counter = 0
+    for i in range(n):
+        if last_visit[arr[i]] != -1:
+            update(last_visit[arr[i]] + 1, -1, bit, n)
+        last_visit[arr[i]] = i
+        update(i + 1, 1, bit, n)
+        while query_counter < q and queries[query_counter].r == i:
+            a = bit_query(queries[query_counter].r + 1, bit, n) - bit_query(queries[query_counter].l, bit, n)
+            queries[query_counter].ans = a
+            query_counter += 1
 
 def ans(A):
     N = len(A) // 2
 
-    A = A[:]
-    indexes = defaultdict(list)
+    indexes = []
+    for _ in range(N+1):
+        indexes += [[]]
     for i, a in enumerate(A):
         indexes[a] += [i]
 
-    swap = 0
+    queries = []
 
+    q = 0
     for i in range(1, N+1):
-        l, r = sorted(indexes[i])
-        elems = defaultdict(list)
-        for j in range(l+1, r):
-            elems[i] += [A[j]]
-        swap += cost(elems[i])
+        l, r = indexes[i]
+        if l > r: l, r = r, l
+        l += 1
+        r -= 1
+        if not (l <= r): continue
+
+        queries += [Query(l, r, q)]
+        q += 1
+
+    answerQueries(A, queries)
+
+    swap = 0
+    for query in queries:
+        num_elems = query.r - query.l + 1 # s + 2r
+        r = num_elems - query.ans
+        s = query.ans - r
+        swap += s
 
     return N + swap//2
 
