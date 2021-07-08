@@ -23,6 +23,8 @@ def count_partitions_interval(n, N, l=0, r=None):
     Number of tuples x_1, x_2 ... x_n such that
     x_i \in [l, r]
     \sum x_i = N
+    aka extended stars and bars
+    https://math.stackexchange.com/questions/553960/extended-stars-and-bars-problemwhere-the-upper-limit-of-the-variable-is-bounded
     """
 
     if r is None: r = N
