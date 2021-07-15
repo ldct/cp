@@ -25,6 +25,8 @@ def count_partitions_interval(n, N, l=0, r=None):
     \sum x_i = N
     aka extended stars and bars
     https://math.stackexchange.com/questions/553960/extended-stars-and-bars-problemwhere-the-upper-limit-of-the-variable-is-bounded
+
+    tag:combinatorics tag:generating-functions tag:number-theory
     """
 
     if r is None: r = N

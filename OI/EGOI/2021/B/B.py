@@ -33,6 +33,8 @@ def bit_query(idx, bit, n):
         idx -= idx & -idx
     return summ
 
+# tag: range frequency query
+# tag:range-query
 def answerQueries(arr, queries):
     queries.sort(key = lambda x: x.r)
 
