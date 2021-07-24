@@ -30,7 +30,7 @@ class Sparse1:
     def query(self, x, y):
         gap = y-x+1
         k = math.floor(math.log(gap,2))
-        ret = min(self.table[k][x],self.table[k][y+1-2**k])
+        ret = min(self.table[k][x], self.table[k][y+1-2**k])
         assert(ret == min(self.table[0][x:y+1]))
         return ret
 
@@ -40,7 +40,6 @@ if False:
             arr = [random.randint(1, 10) for _ in range(N)]
             s = Sparse1(arr)
             s.check()
-        print("checked", N)
 
 class Sparse2:
     def __init__(self, mat):
@@ -96,12 +95,14 @@ class Sparse2:
 
     def query(self, x1, y1, x2, y2):
         lenx=x2-x1+1
-        kx=math.floor(math.log(lenx))
+        kx=math.floor(math.log(lenx, 2))
         leny=y2-y1+1
-        ky=math.floor(math.log(leny))
+        ky=math.floor(math.log(leny, 2))
 
-        min_R1 = min ( self.table[kx ][ky][x1 ][y1 ] , self.table[kx ][ky][x1 ][ y2+1-2**ky ] )
-        min_R2 = min ( self.table[kx ][ky][x2+1-2**kx ][y1 ], self.table[kx ][ky][x2+1-2**kx ][y2+1-2**ky ] )
+        subtable = self.table[kx][ky]
+
+        min_R1 = min (subtable[x1 ][y1] , subtable[x1 ][ y2+1-2**ky ] )
+        min_R2 = min (subtable[x2+1-2**kx][y1], subtable[x2+1-2**kx ][y2+1-2**ky])
 
         ret = min(min_R1, min_R2)
 
@@ -109,20 +110,13 @@ class Sparse2:
 
         return ret
 
-mat = [[3, 8, 1, 5, 7]]
-# mat = [[random.randint(1, 10) for _ in range(5)]]
-s = Sparse2(mat)
-t = s.table
-for i in range(len(t)):
-    for j in range(len(t[i])):
-        print(t[i][j])
-s.check()
-
-for _ in range(0):
-    mat = [[random.randint(1, 2) for _ in range(8)] for _ in range(8)]
+for _ in range(100):
+    mat = [[random.randint(1, 10) for _ in range(5)] for _ in range(5)]
+    print("checking", mat)
     s = Sparse2(mat)
+    t = s.table
     s.check()
-    print(s.table)
+
 
 
 
