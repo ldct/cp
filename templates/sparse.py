@@ -1,19 +1,36 @@
-#!/usr/bin/env pypy3
 
-from sys import stdin, stdout
+class Sparse1:
+    def __init__(self, arr):
+        self._arr = arr[:]
 
-def input(): return stdin.readline().strip()
-def read_int_list(): return list(map(int, input().split()))
-def read_int_tuple(): return tuple(map(int, input().split()))
-def read_int(): return int(input())
+        N = len(arr)
+        self.table = [arr[:]]
 
-import math, copy, random
+        for j in range(1, 1+math.floor(math.log(N, 2))):
+            self.table += [[-1]*N]
+            assert(0 <= j < len(self.table))
+            for i in range(N-2**(j-1)):
+                self.table[j][i] = min(self.table[j-1][i], self.table[j-1][i+2**(j-1)])
+
+    def check(self):
+        for i in range(len(self._arr)):
+            for j in range(i, len(self._arr)):
+                self.query(i, j)
+
+    def query(self, x, y):
+        gap = y-x+1
+        k = math.floor(math.log(gap,2))
+        ret = min(self.table[k][x], self.table[k][y+1-2**k])
+        return ret
 
 def make_fill(N, M, val):
     ret = []
     for _ in range(N):
         ret += [[val]*M]
     return ret
+
+import math
+print(math.floor(math.log(1000000,2)))
 
 class Sparse2:
     def __init__(self, mat):
@@ -46,10 +63,7 @@ class Sparse2:
             for ir in range(N-2**(jr-1)):
                 for jc in range(lM):
                     for ic in range(M):
-                        self.table[jr][jc][ir][ic] = min(
-                            self.table[jr-1 ][jc ][ir][ic ],
-                            self.table[jr-1 ][jc][ir+2**(jr-1)][ic]
-                        )
+                        self.table[jr ][jc ][ir][ic ] = min(self.table[jr-1 ][jc ][ir][ic ],self.table[jr-1 ][jc][ir+2**(jr-1) ][ic ])
 
     def check(self):
         N = len(self._mat)
@@ -70,9 +84,6 @@ class Sparse2:
 
 
     def query(self, x1, y1, x2, y2):
-        if not (x1 <= x2): return float("inf")
-        if not (y1 <= y2): return float("inf")
-
         lenx=x2-x1+1
         kx=math.floor(math.log(lenx, 2))
         leny=y2-y1+1
@@ -80,61 +91,9 @@ class Sparse2:
 
         subtable = self.table[kx][ky]
 
-        if not (x1 <= x2 < len(subtable)): return float("inf")
-        if not (y1 <= y2 < len(subtable[0])): return float("inf")
-
         min_R1 = min (subtable[x1 ][y1] , subtable[x1 ][ y2+1-2**ky ] )
         min_R2 = min (subtable[x2+1-2**kx][y1], subtable[x2+1-2**kx ][y2+1-2**ky])
 
         ret = min(min_R1, min_R2)
 
         return ret
-
-
-### CODE HERE
-
-def ans_one(A, C):
-    N = len(A)
-    M = len(A[0]
-    )
-    old_A = copy.deepcopy(A)
-    A = copy.deepcopy(A)
-    for i in range(N):
-        for j in range(M):
-            A[i][j] += C*(i + j)
-
-    S = Sparse2(A)
-
-    ret = float("inf")
-    for i in range(N):
-        for j in range(M):
-            candidate = old_A[i][j]
-            candidate += min(
-                S.query(i+1, j, N-1, M-1),
-                S.query(i, j+1, N-1, M-1)
-            ) - C*(i+j)
-            ret = min(ret, candidate)
-    return ret
-
-def ans(A, C):
-    ret = ans_one(A, C)
-    A = [row[::-1] for row in A]
-    ret = min(ret, ans_one(A, C))
-    return ret
-
-if True:
-    import random
-    H = 1000
-    W = 1000
-    A = [[random.randint(1, 100) for _ in range(W)] for _ in range(H)]
-
-    Sparse2(A)
-    # print(ans(A, 0))
-
-else:
-    H, W, C = read_int_tuple()
-    A = []
-    for _ in range(H):
-        A += [read_int_list()]
-
-    print(ans(A, C))
