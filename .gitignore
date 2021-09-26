@@ -6,4 +6,5 @@ a.out
 *synctex.gz
 .DS_Store
 .vscode/*
+venv/*
 # FHC/2021/quals
