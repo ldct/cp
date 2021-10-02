@@ -79,4 +79,7 @@ def runs(n, m):
 def ans(n, m):
     return runs(n, m) / n
 
+def ans_fast(n, m):
+    return 1/n + (n-1)/n * (m-1)/(n*m-1)
+
 print(ans(*read_int_list()))
