@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// TAG:small-to-large
-// TAG:dsu TAG:union-find
+// TAG:small-to-large small to large dsu disjoint set union union find
 // see https://codeforces.com/blog/entry/84653 for a O(N sqrt N) solution
 constexpr size_t MAX_N = 200009;
 
