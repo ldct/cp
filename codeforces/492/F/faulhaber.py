@@ -24,22 +24,6 @@ def modinv(a, m):
 
 from itertools import (accumulate, chain, count, islice, starmap)
 
-def faulhaberTriangle_slow(m, p = 10**9+7):
-
-    def Fraction(a, b):
-        return (a * modinv(b, p)) % p
-
-    '''List of rows of Faulhaber fractions.'''
-    def go(rs, n):
-        xs = list(starmap(
-            lambda x, y: Fraction(n, x) * y,
-            zip(islice(count(2), m), rs)
-        ))
-        return [Fraction(1 - sum(xs), 1)] + xs
-    return list(map(lambda x : [r % p for r in x], list(accumulate(
-        [[]] + list(islice(count(0), 1 + m)),
-        go
-    ))[1:]))
 
 def faulhaberTriangle(m, p = 10**9+7):
     ret = [[1]]
@@ -54,3 +38,6 @@ def faulhaberTriangle(m, p = 10**9+7):
 
         ret += [row]
     return ret
+
+for row in faulhaberTriangle(3000):
+    print(row)

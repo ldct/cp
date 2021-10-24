@@ -114,7 +114,7 @@ def poly_of(u):
 def poly_eval(p, x, MODULUS=10**9+7):
     ret = 0
     for i, k in enumerate(p):
-        ret += k*x**i
+        ret += k*pow(x, i, MODULUS)
         ret %= MODULUS
     return ret
 
