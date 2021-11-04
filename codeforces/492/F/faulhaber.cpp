@@ -79,7 +79,7 @@ void poly_sum_int(vector<__int128>& __restrict__ a, long long k, int e) {
 }
 
 vector<long long> integrate(vector<long long>& arr) {
-  cout << "integrate" << arr.size() << endl;
+  // cout << "integrate" << arr.size() << endl;
   vector<__int128> ret(arr.size()+1,0);
   for (int i=0; i<arr.size(); i++) {
     for (int j=0; j<i+1; j++) {
