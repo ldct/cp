@@ -28,6 +28,13 @@ def modinv(a, m):
     g, x, _ = egcd(a % m, m)
     return x % m if g == 1 else None
 
+def pow2(A, B, C, MODULUS):
+    # A^(B^C), prime MODULUS
+    A %= MODULUS
+    if A == 0: return 0
+    BC = pow(B, C, MODULUS-1)
+    return pow(A, BC, MODULUS)
+
 # untested
 
 def count_multiples(A, B, c):
