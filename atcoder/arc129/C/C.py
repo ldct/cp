@@ -7,6 +7,8 @@ def read_int_list(): return list(map(int, input().split()))
 def read_int_tuple(): return tuple(map(int, input().split()))
 def read_int(): return int(input())
 
+import math
+
 ### CODE HERE
 
 def score(S):
@@ -17,14 +19,42 @@ def score(S):
                 ret += 1
     return ret
 
-def ans(target):
-    n = 1
-    while n*(n+1)//2 < target: n += 1
-    n -= 1
-    assert(score("7"*n) <= target <= score("7"*(n+1)))
-    a = int("7"*n)
-    n += 1
-    b = int("7"*n)
-    return a, b
+def choose(x):
+    return x*(x-1) // 2
 
-print(ans(10**5))
+def inv_choose(n):
+    if n < 0: return None
+    m = 1 + int(math.sqrt(8*n+1) - 1) // 2
+    if choose(m) == n: return m
+
+def sum3(N):
+    # return a, b, c s.t. (a choose 2) + (b choose 2) + (c choose 2)
+
+    B = int(math.sqrt(N) + 100)
+
+    for a in range(1, B):
+        for b in range(1, B):
+            c = inv_choose(N - choose(a) - choose(b))
+            if c is not None and c < B:
+                assert(choose(a) + choose(b) + choose(c) == N)
+                return a, b, c
+
+    assert(False)
+
+def ans(N):
+    a, b, c = sum3(N)
+    a -= 1
+    b -= 1
+    c -= 1
+
+    A = a * "7"
+    B = b * "7"
+    C = c * "7"
+
+    x = pow(5, c, 7)
+    y = pow(5, c+1+b, 7)
+    S = f"{A}{x}{B}{y}{C}"
+    return S
+    assert(score(S) == N)
+
+print(ans(read_int()))
