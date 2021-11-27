@@ -1,5 +1,12 @@
 #!/usr/bin/env pypy3
 
+from sys import stdin, stdout
+
+def input(): return stdin.readline().strip()
+def read_int_list(): return list(map(int, input().split()))
+def read_int_tuple(): return tuple(map(int, input().split()))
+def read_int(): return int(input())
+
 import math
 
 class Sieve:
@@ -19,7 +26,7 @@ class Sieve:
     def primes(self):
         return [i for i, e in enumerate(self.s) if e == -1 and i >= 2]
 
-    def fastfactorize(self, n, exclude_duplicates=False):
+    def fastfactorize(self, n, exclude_duplicates=True):
         assert(n <= self.N)
 
         ret = []
@@ -61,7 +68,23 @@ class Sieve:
 
 sieve = Sieve()
 
-SEMIPRIME = 10000019*10000079 # ~ 10^15
+def ans(A):
+    A = sorted(list(set(A)))
+    # print(A)
+    MAX_A = max(A) + 1
 
-for _ in range(10**2):
-    sieve.factorize(SEMIPRIME)
+    best_prime = [0]*MAX_A
+    ret = [0]*MAX_A
+
+    for a in A:
+        ps = sieve.fastfactorize(a)
+        ret[a] = 1
+        for p in ps:
+            ret[a] = max(ret[a], 1+best_prime[p])
+        for p in ps:
+            best_prime[p] = max(best_prime[p], ret[a])
+
+    return max(ret)
+
+input()
+print(ans(read_int_list()))

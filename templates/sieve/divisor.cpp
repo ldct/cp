@@ -4,7 +4,7 @@ using namespace std;
 // computes sigma_1(n) for all 1 <= n <= 10^7
 // 1s
 
-constexpr size_t MAX_N = 10000007;
+constexpr size_t MAX_N = 5000000;
 
 int s[MAX_N];
 
