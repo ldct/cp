@@ -60,10 +60,6 @@ public:
   long long pointGet(int idx) {
     return rangeSum(idx, idx);
   }
-  void pointIncrement(int idx, long long amount) {
-    Op op;
-    pointSet(idx, op(pointGet(idx), amount));
-  }
 };
 
 // If a maxtree/mintree is needed

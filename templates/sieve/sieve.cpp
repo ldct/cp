@@ -23,8 +23,8 @@ public:
   }
 };
 
-int main() {  
+int main() {
   auto s = Sieve();
-  cout << s.count_primes() << endl;
+  cout << "there are " << s.count_primes() << " primes less than 10^7" << endl;
   return 0;
 }
