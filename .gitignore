@@ -7,8 +7,5 @@ a.out
 .DS_Store
 .vscode/*
 venv/*
-codechef/OCT21B
-dmoj/ucrpc21
 LUCKYNUM/
-dmoj/dmopc21c3/*
-dmoj/nccc9/*
+advent_of_code/*
