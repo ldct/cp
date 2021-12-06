@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define endl '\n'
+#define int long long
+#define i32 int32_t
 
 int N;
 
-int main() {
+i32 main() {
 
   cin >> N;
   cout << N << endl;

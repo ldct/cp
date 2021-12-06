@@ -9,6 +9,12 @@ def subsets(iterable, low=0, high=None):
 
 print(list(subsets([1,2,3], 2, 2)))
 
+def subsequences(S):
+    ret = []
+    for indices in range(subsets(range(len(S)))):
+        ret += [S[i] for i in indices]
+    return ret
+
 ## shim for math.comb
 def comb(n, r):
     if r > n: return 0
