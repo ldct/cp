@@ -41,6 +41,31 @@ def subsequences(S):
 
 from functools import lru_cache
 
+def ans_bottom(S):
+    i = len(S)
+    sz = len(S)+9
+    dp1 = [1]*(sz)
+    dp2 = [1]*(sz)
+    while i > 0:
+        i -= 1
+        dp1_add = dict()
+        dp2_add = dict()
+
+        if S[i]+1 < sz: dp1_add[S[i]+1] = dp1[S[i]+1]
+        dp1_add[S[i]-1] = dp1[S[i]-1]
+
+        if S[i]+1 < sz: dp2_add[S[i]+1] = dp2[S[i]+1]
+        if S[i]+1 < sz: dp2_add[S[i]] = dp2[S[i]+1]
+        dp2_add[S[i]-1] = dp1[S[i]-1]
+
+        for k in dp1_add:
+            dp1[k] += dp1_add[k]
+            dp1[k] %= MODULUS
+        for k in dp2_add:
+            dp2[k] += dp2_add[k]
+            dp2[k] %= MODULUS
+    return (dp2[0]-1) % MODULUS
+
 def ans(S):
     @lru_cache(None)
     def dp(mex_before, has_top, i):
@@ -51,11 +76,11 @@ def ans(S):
             return ret % MODULUS
         else:
             ret = dp(mex_before, False, i+1)
-            if S[i] == mex_before-1: ret += dp(mex_before, False, i+1)
+            if S[i]+1 == mex_before: ret += dp(mex_before, False, i+1)
             if S[i] == mex_before: ret += dp(mex_before+1, False, i+1)
-            if S[i] == mex_before+1: ret += dp(mex_before, True, i+1)
+            if S[i]-1 == mex_before: ret += dp(mex_before, True, i+1)
             return ret % MODULUS
-    return dp(0, False, 0)-1
+    return (dp(0, False, 0)-1) % MODULUS
 
 def ans_slow(S):
     ret = 0
@@ -71,13 +96,13 @@ if False:
 elif False:
     for N in range(10):
         for p in product(range(10), repeat=N):
-            assert(ans_slow(p) == ans(p))
+            assert(ans(p) == ans_bottom(p))
         print("checked", N)
 elif True:
     for _ in range(read_int()):
         input()
         tc = read_int_list()
-        print(ans(tc))
+        print(ans_bottom(tc))
         # assert(ans(tc) == ans_slow(tc))
 
 # seq = [0]*5

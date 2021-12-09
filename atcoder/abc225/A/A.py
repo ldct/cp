@@ -13,5 +13,8 @@ from collections import Counter, defaultdict
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+S = input()
+ret = set()
+for s in permutations(S):
+    ret.add(''.join(s))
+print(len(ret))

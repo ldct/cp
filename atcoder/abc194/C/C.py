@@ -7,11 +7,14 @@ def read_int_list(): return list(map(int, input().split()))
 def read_int_tuple(): return tuple(map(int, input().split()))
 def read_int(): return int(input())
 
-from itertools import permutations
-from math import factorial, gcd
 from collections import Counter, defaultdict
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+input()
+A = Counter(read_int_list())
+ret = 0
+for i in range(-300, 300):
+    for j in range(-300, 300):
+        ret += A[i]*A[j]*(i - j)**2
+print(ret // 2)

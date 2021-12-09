@@ -7,11 +7,17 @@ def read_int_list(): return list(map(int, input().split()))
 def read_int_tuple(): return tuple(map(int, input().split()))
 def read_int(): return int(input())
 
-from itertools import permutations
-from math import factorial, gcd
-from collections import Counter, defaultdict
+from collections import Counter
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+def ans(A):
+    ret = len(set(A))
+    ntk = []
+    for x in list(Counter(A).values()):
+        if x > 1:
+            ntk += [x - 1]
+    return ret - (sum(ntk) % 2)
+
+input()
+print(ans(read_int_list()))

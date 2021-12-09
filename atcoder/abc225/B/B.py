@@ -13,5 +13,19 @@ from collections import Counter, defaultdict
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+deg = defaultdict(int)
+
+for _ in range(read_int()-1):
+    u, v = read_int_tuple()
+    deg[u] += 1
+    deg[v] += 1
+
+def is_star(deg):
+    deg = list(deg.values())
+    deg.sort()
+    return deg[-2] == 1
+
+if is_star(deg):
+    print("Yes")
+else:
+    print("No")
