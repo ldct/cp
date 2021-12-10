@@ -11,9 +11,14 @@ from itertools import permutations, chain, combinations
 from math import factorial, gcd
 from collections import Counter, defaultdict
 from heapq import heappush, heappop, heapify
-from bisect import bisect_left
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+def ans(S):
+    if len(set(S)) == 1: return "Weak"
+    new_S = [(S[0] + i) % 10 for i in range(4)]
+    if S == new_S: return "Weak"
+    return "Strong"
+
+S = list(map(int, input()))
+print(ans(S))

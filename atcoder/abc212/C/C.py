@@ -15,5 +15,21 @@ from bisect import bisect_left
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+def ans(A, B):
+    ret = float("inf")
+    A.sort()
+    B.sort()
+
+    for a in A:
+        i = bisect_left(B, a)
+        for j in [i-1, i, i+1]:
+            try:
+                ret = min(ret, abs(a - B[j]))
+            except:
+                pass
+    return ret
+
+input()
+A = read_int_list()
+B = read_int_list()
+print(ans(A, B))
