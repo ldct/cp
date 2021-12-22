@@ -12,6 +12,7 @@ from math import factorial, gcd
 from collections import Counter, defaultdict
 from heapq import heappush, heappop, heapify
 from bisect import bisect_left
+from functools import lru_cache
 
 ### CODE HERE
 
@@ -53,6 +54,7 @@ def ans(X, coins):
 
     for Y in range(X, 2*X+10):
         if ret == score(Y):
+            continue
             print(Y)
 
     return ret
@@ -66,29 +68,30 @@ def greedy_lst(X, coins):
     return ret
 
 def ans_fast(X, coins):
-    ret = greedy_lst(X, coins)[::-1]
-    coins = sorted(coins)
+    coins.sort()
 
-    ratios = [None]*(len(coins)-1)
-    for i in range(len(coins)-1):
-        ratios[i] = coins[i+1] // coins[i]
+    @lru_cache(None)
+    def ans(X, i):
+        if i == len(coins)-1:
+            assert(X % coins[-1] == 0)
+            return X // coins[-1]
 
-    ratios += [float("inf")]
+        top = X % coins[i+1]
+        return min(
+            (top // coins[i]) + ans(X - top, i+1),
+            (coins[i+1] - top) // coins[i] + ans(X - top + coins[i+1], i+1)
+        )
 
-    for i in range(len(ret)):
-        if (ret[i] > ratios[i] / 2):
-            ret[i] = ret[i]-ratios[i]
-            ret[i+1] += 1
-    return sum(map(abs,ret))
+    return ans(X, 0)
 
-if True:
-    print(ans_fast(49, [1,2,14]))
-    print(ans(49, [1,2,14]))
-elif True:
+if False:
+    print(ans(87, [1,10,100]))
+    print(ans_fast(87, [1,10,100]))
+elif False:
     for X in range(2, 2000):
         assert(ans_10_fast(X) == ans(X, [1000, 100, 10, 1]))
         assert (ans_10_fast(X) == ans_10(X))
 else:
     _, X = read_int_tuple()
     coins = read_int_list()
-    print(ans(X, coins))
+    print(ans_fast(X, coins))
