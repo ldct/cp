@@ -7,6 +7,4 @@ a.out
 .DS_Store
 .vscode/*
 venv/*
-LUCKYNUM/
 advent_of_code/*
-usaco/2021_dec
