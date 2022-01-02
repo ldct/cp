@@ -9,9 +9,9 @@ struct pair_hash {
 };
 
 struct UF_grid {
-	vector<int> e;
+  vector<int> e;
   int r; int c;
-	UF_grid(int _r, int _c, int n) {
+  UF_grid(int _r, int _c, int n) {
     r = _r; c = _c;
     e = vector<int>(r*c+n, -1);
   }
@@ -19,15 +19,15 @@ struct UF_grid {
     if (x < 0) return r*c - 1 - x;
     return x*c + y;
   }
-	bool sameSet(int a, int b) { return find(a) == find(b); }
-	int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
-	bool join(int a, int b) {
-		a = find(a), b = find(b);
-		if (a == b) return false;
-		if (e[a] > e[b]) swap(a, b);
-		e[a] += e[b]; e[b] = a;
-		return true;
-	}
+  bool sameSet(int a, int b) { return find(a) == find(b); }
+  int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
+  bool join(int a, int b) {
+    a = find(a), b = find(b);
+    if (a == b) return false;
+    if (e[a] > e[b]) swap(a, b);
+    e[a] += e[b]; e[b] = a;
+    return true;
+  }
 
   bool sameSet(int a, int b, int c, int d) { return sameSet(conv(a, b), conv(c, d)); }
   int find(int a, int b) { return find(conv(a, b)); }

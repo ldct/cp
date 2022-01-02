@@ -2,12 +2,12 @@
 using namespace std;
 
 struct UF {
-	vector<int> e;
+    vector<int> e;
     int cc = 0;
     unordered_set<int> activated;
     vector<int> neighbours[200009];
 
-	UF(int n) : e(n, -1) {}
+    UF(int n) : e(n, -1) {}
 
     void add_edge(int u, int v) {
         neighbours[u].push_back(v);
@@ -23,17 +23,17 @@ struct UF {
             }
         }
     }
-	bool sameSet(int a, int b) { return find(a) == find(b); }
-	int size(int x) { return -e[find(x)]; }
-	int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
-	bool join(int a, int b) {
-		a = find(a), b = find(b);
-		if (a == b) return false;
+    bool sameSet(int a, int b) { return find(a) == find(b); }
+    int size(int x) { return -e[find(x)]; }
+    int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
+    bool join(int a, int b) {
+        a = find(a), b = find(b);
+        if (a == b) return false;
         cc--;
-		if (e[a] > e[b]) swap(a, b);
-		e[a] += e[b]; e[b] = a;
-		return true;
-	}
+        if (e[a] > e[b]) swap(a, b);
+        e[a] += e[b]; e[b] = a;
+        return true;
+    }
 };
 
 int main() {

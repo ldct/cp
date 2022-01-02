@@ -12,21 +12,21 @@ namespace io_aux {
 } using namespace io_aux;
 
 struct UF {
-	vector<int> e;
+    vector<int> e;
     int N;
-	UF(int n) : e(n, -1) {
+    UF(int n) : e(n, -1) {
         N = n;
     }
-	bool sameSet(int a, int b) { return find(a) == find(b); }
-	int size(int x) { return -e[find(x)]; }
-	int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
-	bool join(int a, int b) {
-		a = find(a), b = find(b);
-		if (a == b) return false;
-		if (e[a] > e[b]) swap(a, b);
-		e[a] += e[b]; e[b] = a;
-		return true;
-	}
+    bool sameSet(int a, int b) { return find(a) == find(b); }
+    int size(int x) { return -e[find(x)]; }
+    int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
+    bool join(int a, int b) {
+        a = find(a), b = find(b);
+        if (a == b) return false;
+        if (e[a] > e[b]) swap(a, b);
+        e[a] += e[b]; e[b] = a;
+        return true;
+    }
     vector<int> sizes() {
         vector<int> ret;
         for (int i=0;i<N; i++) {

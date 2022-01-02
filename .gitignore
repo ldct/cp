@@ -8,3 +8,4 @@ a.out
 .vscode/*
 venv/*
 advent_of_code/*
+kattis/
