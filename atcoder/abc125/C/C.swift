@@ -39,5 +39,32 @@ func input() {
     let _ = readLine()
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+func gcd(_ a: Int, _ b: Int) -> Int {
+    if (a == 0) { return b }
+    if (b == 0) { return a }
+    let r = a % b
+    if r != 0 {
+        return gcd(b, r)
+    } else {
+        return b
+    }
+}
+
+func gcdPrefix(_ arr: [Int]) -> [Int] {
+    var ret = [0]
+    for a in arr {
+        let p = gcd(ret.last!, a)
+        ret.append(p)
+    }
+    return ret
+}
+
+input()
+let A = readInts()
+
+let front = gcdPrefix(A)
+let back = Array(gcdPrefix(A.reversed()).reversed())
+
+let candidates = (0..<A.count).map { gcd(front[$0], back[$0+1]) }
+
+print(candidates.max()!)

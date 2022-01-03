@@ -10,6 +10,10 @@ extension Array {
     func splat() -> (E,E,E,E,E) { return (self[0],self[1],self[2],self[3],self[4]) }
 }
 
+func input() {
+    let _ = readLine()
+}
+
 func readInts() -> [Int] {
     readLine()!.split(separator: " ").map { Int($0)! }
 }
@@ -31,13 +35,17 @@ extension Collection {
 }
 
 extension Sequence where Element: Numeric {
-    /// Returns the sum of all elements in the collection
     func sum() -> Element { return reduce(0, +) }
 }
 
-func input() {
-    let _ = readLine()
-}
+input()
+let arr = readInts()
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+let num_neg = arr.count { $0 < 0 } % 2
+let abs_arr = arr.map { abs($0) }.sorted()
+
+if num_neg == 0 {
+    print(abs_arr.sum() )
+} else {
+    print(abs_arr.sum() - 2*abs_arr.min()!)
+}
