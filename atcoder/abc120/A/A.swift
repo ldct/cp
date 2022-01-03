@@ -24,5 +24,5 @@ extension Int {
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+let (A, B, C) = readInts().splat()
+print(min(C, B/A))

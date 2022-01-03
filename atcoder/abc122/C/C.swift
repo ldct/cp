@@ -24,5 +24,25 @@ extension Int {
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+let (N, Q) = readInts().splat()
+
+let S = Array(readLine()!)
+
+var prefixes = [0, 0]
+
+for i in 1..<S.count {
+    var n = prefixes.last!
+
+    if S[i-1] == "A" && S[i] == "C" {
+        n += 1
+    }
+
+    prefixes.append(n)
+}
+
+Q.times {
+    var (l, r) = readInts().splat()
+    l -= 1
+    if S[l] == "C" { l += 1}
+    print(prefixes[r] - prefixes[l])
+}

@@ -24,5 +24,10 @@ extension Int {
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+switch readLine() {
+    case "A": print("T")
+    case "T": print("A")
+    case "C": print("G")
+    case "G": print("C")
+    default: print("?")
+}

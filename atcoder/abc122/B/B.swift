@@ -24,5 +24,24 @@ extension Int {
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+func ok(_ S: String) -> Bool {
+    for c in S {
+        if !("ATCG".contains(c)) { return false }
+    }
+    return true
+}
+
+let S = Array(readLine()!)
+
+var ret = ""
+
+for i in 0...S.count {
+    for j in i...S.count {
+        let s = String(S[i..<j])
+        if ok(s) && s.count > ret.count {
+            ret = s
+        }
+    }
+}
+
+print(ret.count)
