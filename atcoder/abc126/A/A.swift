@@ -14,15 +14,9 @@ func readInts() -> [Int] {
     readLine()!.split(separator: " ").map { Int($0)! }
 }
 
-func readInt() -> [Int] {
-    Int(readLine()!)!
-}
+let (N, K) = readInts().splat()
+var S = Array(readLine()!)
 
-extension Int {
-    func times(_ f: () -> ()) {
-        if self > 0 { for _ in 0..<self { f() } }
-    }
-}
+S[K-1] = Character(S[K-1].lowercased())
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+print(String(S))

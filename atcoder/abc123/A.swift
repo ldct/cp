@@ -14,7 +14,7 @@ func readInts() -> [Int] {
     readLine()!.split(separator: " ").map { Int($0)! }
 }
 
-func readInt() -> [Int] {
+func readInt() -> Int {
     Int(readLine()!)!
 }
 
@@ -24,5 +24,15 @@ extension Int {
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+let a = readInt()
+let b = readInt()
+let c = readInt()
+let d = readInt()
+let e = readInt()
+let k = readInt()
+
+if e - a > k {
+    print(":(")
+} else {
+    print("Yay!")
+}

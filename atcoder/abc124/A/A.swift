@@ -14,15 +14,20 @@ func readInts() -> [Int] {
     readLine()!.split(separator: " ").map { Int($0)! }
 }
 
-func readInt() -> [Int] {
-    Int(readLine()!)!
-}
-
 extension Int {
     func times(_ f: () -> ()) {
         if self > 0 { for _ in 0..<self { f() } }
     }
 }
 
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+var (A, B) = readInts().splat()
+
+var ret = 0
+
+2.times {
+    if B > A { swap(&A, &B) }
+    ret += A
+    A -= 1
+}
+
+print(ret)

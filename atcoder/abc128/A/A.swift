@@ -14,15 +14,7 @@ func readInts() -> [Int] {
     readLine()!.split(separator: " ").map { Int($0)! }
 }
 
-func readInt() -> [Int] {
-    Int(readLine()!)!
-}
+var (A, P) = readInts().splat()
 
-extension Int {
-    func times(_ f: () -> ()) {
-        if self > 0 { for _ in 0..<self { f() } }
-    }
-}
-
-let (P, Q, R) = readInts().splat()
-print(P, Q, R)
+P += 3*A
+print(P / 2)
