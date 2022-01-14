@@ -1,8 +1,10 @@
 #!/usr/bin/env pypy3
 
+import io, os
 from sys import stdin, stdout
 
-def input(): return stdin.readline().strip()
+input = io.BytesIO(os.read(0,os.fstat(0).st_size)).readline
+# def input(): return stdin.readline().strip()
 def read_int_list(): return list(map(int, input().split()))
 def read_int_tuple(): return tuple(map(int, input().split()))
 def read_int(): return int(input())
