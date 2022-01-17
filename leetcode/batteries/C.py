@@ -50,4 +50,4 @@ class Solution:
                 return i-1
 
 s = Solution()
-print(s.maxRunTime(2, [3,5,10,10]))
+print(s.maxRunTime(2, [10,10,]))
