@@ -11,6 +11,7 @@ namespace io_aux {
   template<class C, class T, class... A> auto operator<<(basic_ostream<C, T>& os, tuple<A...> const& t) -> basic_ostream<C, T>& { os << "("; aux::pt(os, t, aux::gs<sizeof...(A)>()); return os << ")"; }
 } using namespace io_aux;
 
+// min-prefix-sum segment tree
 class SegTree {
 public:
   unique_ptr<SegTree> lTree;
