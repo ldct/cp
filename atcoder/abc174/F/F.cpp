@@ -9,6 +9,7 @@ using namespace std;
 
 set<int> EMPTYSET;
 
+// NOTE: this class is too slow
 class SegTree {
 public:
   unique_ptr<SegTree> lTree;
