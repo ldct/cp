@@ -5,7 +5,7 @@ template<class T1, class T2> ostream& operator << (ostream& os, const pair<T1,T2
 template<class T> ostream& operator << (ostream& os, const vector<T>& v) { os << "["; for (int i=0; i<v.size(); i++) { os << v[i]; if (i < v.size() - 1) os << ", "; } return os << "]"; }
 template<class T> ostream& operator << (ostream& os, const set<T>& v) { os << "{"; for (const T& e : v) os << e << ", "; return os << "}"; }
 
-
+// XOR segment tree class SegTreeXOR
 template<class Op, long long neutral>
 class SegTree {
 public:
