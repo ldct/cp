@@ -5,6 +5,7 @@ using namespace std;
 #define i32 int32_t
 
 // tested on https://codeforces.com/edu/course/2/lesson/4/3/practice/contest/274545/problem/E
+// tested on https://codeforces.com/edu/course/2/lesson/5/1/practice/contest/279634/problem/A
 
 // Update: range increment
 // Query: point get
