@@ -18,5 +18,18 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def cost_p(p):
+    ret = 0
+    for i in range(len(p)-1):
+        ret = max(ret, p[i]^p[i+1])
+    return ret
+
+def cost(n):
+    return min(cost_p(p) for p in permutations(range(n)))
+
+def gen_p(n):
+    b = (n-1).bit_length()-1
+    return list(range(1 << b))[::-1] + list(range(1 << b, n))
+
 for _ in range(read_int()):
-    pass
+    print(*gen_p(read_int()))
