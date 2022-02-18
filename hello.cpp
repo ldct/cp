@@ -3,6 +3,7 @@ using namespace std;
 #define endl '\n'
 #define int long long
 #define i32 int32_t
+#define i64 int64_t
 
 int N;
 
