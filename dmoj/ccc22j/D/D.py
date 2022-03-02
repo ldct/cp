@@ -18,5 +18,31 @@ from functools import lru_cache
 
 ### CODE HERE
 
+same_group = []
+diff_group = []
 for _ in range(read_int()):
-    pass
+    a, b = input().split()
+    same_group += [(a, b)]
+for _ in range(read_int()):
+    a, b = input().split()
+    diff_group += [(a, b)]
+
+leader = dict()
+
+for _ in range(read_int()):
+    a, b, c = input().split()
+    l = max(a, b, c)
+    for m in [a, b, c]:
+        leader[m] = l
+
+violations = 0
+
+for a, b in same_group:
+    if leader[a] != leader[b]:
+        violations += 1
+
+for a, b in diff_group:
+    if leader[a] == leader[b]:
+        violations += 1
+
+print(violations)

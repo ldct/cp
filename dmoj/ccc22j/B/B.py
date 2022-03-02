@@ -18,5 +18,17 @@ from functools import lru_cache
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+num_good = False
+all_good = True
+
+N = read_int()
+for _ in range(N):
+    points = read_int()
+    fouls = read_int()
+    score = 5*points - 3*fouls
+    if score > 40:
+        num_good += 1
+    else:
+        all_good = False
+
+print(f"{num_good}{'+' if all_good else ''}")

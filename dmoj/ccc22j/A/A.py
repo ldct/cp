@@ -18,5 +18,7 @@ from functools import lru_cache
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+R = read_int()
+S = read_int()
+
+print(R*8 + S*3 - 28)

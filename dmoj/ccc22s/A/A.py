@@ -18,5 +18,13 @@ from functools import lru_cache
 
 ### CODE HERE
 
-for _ in range(read_int()):
-    pass
+def ans(N):
+    ret = 0
+    for i in range(N+2):
+        if i * 4 > N: break
+        if (N - (i*4)) % 5 == 0:
+            ret += 1
+    return ret
+
+N = read_int()
+print(ans(N))
