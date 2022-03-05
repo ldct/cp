@@ -59,6 +59,6 @@ def ans_fast(T, K):
         state = next_state(state)
     return 1+state
 
-# print(ans_fast(*read_int_tuple()))
-print(ans_fast(20, 1000000))
-print(ans_fast(20, 100000000))
+print(ans_fast(*read_int_tuple()))
+# print(ans_fast(20, 1000000))
+# print(ans_fast(20, 100000000))

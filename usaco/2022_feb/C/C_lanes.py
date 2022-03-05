@@ -1,6 +1,6 @@
 #!/usr/bin/env pypy3
 
-import io, os
+import io, os, sys
 from sys import stdin, stdout
 
 # input = io.BytesIO(os.read(0,os.fstat(0).st_size)).readline
@@ -51,14 +51,11 @@ def kruskal(n, U, V, W):
     return cost, mst_u, mst_v, n == 1 + merge_cnt
 
 points = []
-ys = set()
 idx_of = dict()
 for i in range(read_int()):
     x, y = read_int_tuple()
     points += [(x, y)]
     idx_of[(x, y)] = i
-    ys.add(y)
-
 
 points.sort()
 last_x_of_y = dict()
@@ -79,6 +76,7 @@ def add_edge(x, y, X, Y):
 for x, y in points:
     for Y in last_x_of_y:
         X = last_x_of_y[Y]
+        print("added an edge", X, Y, x, y)
         add_edge(x, y, X, Y)
     last_x_of_y[y] = x
 
