@@ -36,24 +36,6 @@ def factorize(n):
 def is_prime(x):
     return len(factorize(x)) == 1
 
-def partitions(arr):
-    ret = []
-    n = len(arr)
-
-    for partition_index in range(2 ** (n-1)):
-        partition = []
-        subset = []
-
-        for position in range(n):
-            subset.append(arr[position])
-
-            if 1 << position & partition_index or position == n-1:
-                partition.append(subset)
-                subset = []
-
-        ret += [partition]
-    return ret
-
 def product(lst):
     p = 1
     for i in lst:
@@ -109,27 +91,21 @@ def ans(x, d):
     if len(b) >= 2: return True
 
     if len(b) == 0:
-        if len(a) <= 2: return False
-        return True
+        return len(a) >= 3
 
     assert(len(b) == 1)
 
     b = b[0]
     if b*b == d:
-        if len(a) <= 3: return False
-        return True
+        return len(a) > 3
 
-    # a >= 2
-    # b <= a
-
-    assert(len(a) >= 2)
     return len(a) >= 3
 
 if False:
     x, d = 3, 4
     print(ans_slow(x, d))
     print(ans(x, d))
-elif True:
+elif False:
     for d in [2, 4, 6, 8]:
         for x in range(2, 1000):
             r = ans(x, d)
