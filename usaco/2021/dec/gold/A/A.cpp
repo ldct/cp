@@ -22,16 +22,29 @@ int memo0[100009];
 int memo[5009][5009];
 
 int ans_t1(int i) {
+  // cost to pair the sequence Ys[i:]
+
   if (i >= N) return 0;
   if (i == N-1) return Ys[i];
 
   if (memo0[i] != -1) return memo0[i];
 
+  // leave `i` unpaired, incurring a cost of `Ys[i]`
   int ret = Ys[i] + ans_t1(i+1);
 
+  // pair up `i` and `i+1`
   if (Xs[i+1] - Xs[i] <= K) ret = min(ret, ans_t1(i+2));
 
+  // pair up `i` and `i+2`; leave `i+1` unpaired, incurring a cost of `Ys[i+1]`
   if (i+2 < N && (Xs[i+2] - Xs[i] <= K)) ret = min(ret, Ys[i+1] + ans_t1(i+3));
+
+  /*
+  every pairing can be transformed into a non-overlapping pairing, e.g.
+
+  x1 x2 x3 x4
+
+  x1-x3, x2-x4 -> x1-x2, x3-x4
+  */
 
   return memo0[i] = ret;
 }
@@ -41,7 +54,11 @@ bool far(int i, int j) {
   return Xs[i] - Xs[j] > K;
 }
 
+// actually ans_t2
 int ans(int i, int j) {
+  // cost to pair the sequence Ys[i:], assuming that Ys[j] is unpaired (j < i).
+  // this imposes some constraints on valid pairings; if we leave `k` unpaired,
+  // then `fair(i, k)` must hold
   if (i == N) return 0;
   if (i == N-1) {
     if (!far(i, j)) return LLONG_MIN;
