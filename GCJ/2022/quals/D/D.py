@@ -1,5 +1,6 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
+import sys
 from sys import stdin, stdout
 
 def input(): return stdin.readline().strip()
@@ -10,6 +11,10 @@ def read_int(): return int(input())
 from collections import defaultdict
 from itertools import permutations
 
+sys.setrecursionlimit(200000)
+
+
+# given a test case and an order to visit things in, compute the score
 def score(F, P, order):
     N = len(F)
     visited = set([0])
@@ -25,6 +30,35 @@ def score(F, P, order):
         a = visit(u)
         ret += a
     return ret
+
+def ans_dfs_oneval(F, P):
+    children = defaultdict(list)
+
+    N = len(F)
+    F = [0] + F
+    P = [-1] + P
+
+    for i, p in enumerate(P):
+        if p == -1: continue
+        children[p] += [i]
+
+    def dfs(u):
+        if len(children[u]) == 0: return (F[u], 0)
+
+        cv = []
+        fixed = 0
+
+        for v in children[u]:
+            e, f = dfs(v)
+            fixed += f
+            cv += [e]
+
+        cv.sort()
+        cv[0] = max(cv[0], F[u])
+
+        return (cv[0], fixed + sum(cv[1:]))
+
+    return sum(dfs(0))
 
 def ans_dfs(F, P):
     children = defaultdict(list)
@@ -81,15 +115,26 @@ def ans_slow(F, P):
 
 if False:
     P = [0, 1, 2, 2]
-    F = [1, 1, 2, 3]
+    F = [5, 2, 3, 1]
+
+    """
+
+    5
+    |
+    2--1
+    |
+    3
+
+    """
+
     print(ans_slow(F, P))
-    print(ans_dfs(F, P))
+    print(ans_dfs_oneval(F, P))
 elif False:
     import random
     for _ in range(1000):
-        P = [0, 1, 1, 2, 2, 3, 3]
+        P = [0, 1, 1, 2, 2, 2, 2]
         F = [random.randint(1, 5) for _ in range(len(P))]
-        if not (ans_dfs(F, P) == ans_slow(F, P)):
+        if not (ans_dfs_oneval(F, P) == ans_slow(F, P)):
             print(F, P)
             break
 elif False:
@@ -106,4 +151,4 @@ else:
         input()
         F = read_int_list()
         P = read_int_list()
-        print("Case #" + str(t+1) + ": " + str(ans_dfs(F, P)))
+        print("Case #" + str(t+1) + ": " + str(ans_dfs_oneval(F, P)))
