@@ -2,10 +2,11 @@
 
 using namespace std;
 
+// cf: 935ms
 class DivisorSieve {
 public:
   vector<vector<int>> divisors;
-  DivisorSieve(size_t N=5e5) {
+  DivisorSieve(size_t N=1e6) {
     divisors = vector<vector<int>>(N, vector<int>());
     for (int i=1; i<N; i++) {
       for (int j=i; j<N; j+=i) {
