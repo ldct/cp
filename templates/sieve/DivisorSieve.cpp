@@ -5,12 +5,11 @@ using namespace std;
 // cf: 935ms
 class DivisorSieve {
 public:
-  vector<vector<int>> divisors;
-  DivisorSieve(size_t N=1e6) {
-    divisors = vector<vector<int>>(N, vector<int>());
-    for (int i=1; i<N; i++) {
-      for (int j=i; j<N; j+=i) {
-        if (i == j) continue;
+  vector<vector<int32_t>> divisors;
+  DivisorSieve(size_t N=1e6+10) {
+    divisors = vector<vector<int32_t>>(N, vector<int32_t>());
+    for (int32_t i=1; i<N; i++) {
+      for (int32_t j=i; j<N; j+=i) {
         divisors[j].push_back(i);
       }
     }
