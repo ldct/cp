@@ -1,7 +1,7 @@
 #!/usr/bin/env pypy3
 
-from sys import stdin, stdout
-from itertools import product, combinations_with_replacement
+from sys import stdin, stdout, exit
+from itertools import product, combinations_with_replacement, permutations
 from math import factorial
 
 def input(): return stdin.readline().strip()
@@ -16,88 +16,134 @@ def interesting(seq):
         A *= c
     return (A % sum(seq)) == 0
 
-interesting_sorted = list(combinations_with_replacement(range(10), 12))
-interesting_sorted = [seq for seq in interesting_sorted if interesting(seq)]
+NUM_DIGITS = 5
 
-MAX_CHAR = 10
-MAX_FACT = 20
-fact = [None] * (MAX_FACT)
+# number of 12-digit numbers, where order of digits does not matter = (9 multichoose 12)
+digits_multiset = list(combinations_with_replacement(range(1,10), NUM_DIGITS))
+# assert(len(digits_multiset) == 293,930)
 
-def precomputeFactorials():
-    fact[0] = 1
-    for i in range(1, MAX_FACT):
-        fact[i] = fact[i - 1] * i
+# the subset of those which are interesting. any permutation is an interesting number
+interesting_sorted = [seq for seq in digits_multiset if interesting(seq)]
+# assert(len(interesting_sorted) == 192,781)
 
-# Function for nth permutation
-def nPermute(string, n):
-    n += 1
+interesting_sorted = [sorted(x) for x in interesting_sorted]
+interesting_sorted.sort()
+for x in interesting_sorted[0:10]:
+    print(x)
 
-    precomputeFactorials()
+def tup_of_int(x):
+    x = list(map(int, str(x)))
+    while len(x) != NUM_DIGITS:
+        x = [0] + x
+    x = tuple(x)
+    return x
 
-    # length of given string
-    length = len(string)
+def num_permutations(seq, a, b):
+    # the number of permutations of `seq` which are lexicographically <= `bound`
+    ret = 0
+    for p in set(permutations(seq)):
+        if a <= p <= b:
+            ret += 1
+    return ret
 
-    # Count frequencies of all
-    # characters
-    freq = [0] * (MAX_CHAR)
-    for i in range(0, length):
-        freq[string[i]] += 1
+def num_interesting(a, b):
+    # the number of interesting numbers <= `bound`
 
-    # out string for output string
-    out = [None] * (MAX_CHAR)
+    a = tup_of_int(a)
+    b = tup_of_int(b)
 
-    # iterate till sum equals n
-    Sum, k = 0, 0
+    ret = 0
+    for seq in interesting_sorted:
+        ret += num_permutations(seq, a, b)
+    return ret
 
-    # We update both n and sum in
-    # this loop.
-    while Sum != n:
+def ans(a, b):
+    return num_interesting(a, b)
 
-        Sum = 0
+T = int(input())
+for t in range(T):
+    a, b = read_int_tuple()
+    print("Case #" + str(t+1) + ": " + str(ans(a, b)))
 
-        # check for characters present in freq[]
-        for i in range(0, MAX_CHAR):
-            if freq[i] == 0:
-                continue
+# MAX_CHAR = 10
+# MAX_FACT = 20
+# fact = [None] * (MAX_FACT)
 
-            # Remove character
-            freq[i] -= 1
+# def precomputeFactorials():
+#     fact[0] = 1
+#     for i in range(1, MAX_FACT):
+#         fact[i] = fact[i - 1] * i
 
-            # calculate sum after fixing
-            # a particular char
-            xsum = fact[length - 1 - k]
-            for j in range(0, MAX_CHAR):
-                xsum = xsum // fact[freq[j]]
-            Sum += xsum
+# # Function for nth permutation
+# def nPermute(string, n):
+#     n += 1
 
-            # if sum > n fix that char as
-            # present char and update sum
-            # and required nth after fixing
-            # char at that position
-            if Sum >= n:
-                out[k] = i
-                n -= Sum - xsum
-                k += 1
-                break
+#     precomputeFactorials()
 
-            # if sum < n, add character back
-            if Sum < n:
-                freq[i] += 1
+#     # length of given string
+#     length = len(string)
 
-    # if sum == n means this char will provide
-    # its greatest permutation as nth permutation
-    i = MAX_CHAR-1
-    while k < length and i >= 0:
-        if freq[i]:
-            out[k] = i
-            freq[i] -= 1
-            i += 1
-            k += 1
+#     # Count frequencies of all
+#     # characters
+#     freq = [0] * (MAX_CHAR)
+#     for i in range(0, length):
+#         freq[string[i]] += 1
 
-        i -= 1
+#     # out string for output string
+#     out = [None] * (MAX_CHAR)
 
-    # print result
-    return out[:k]
+#     # iterate till sum equals n
+#     Sum, k = 0, 0
+
+#     # We update both n and sum in
+#     # this loop.
+#     while Sum != n:
+
+#         Sum = 0
+
+#         # check for characters present in freq[]
+#         for i in range(0, MAX_CHAR):
+#             if freq[i] == 0:
+#                 continue
+
+#             # Remove character
+#             freq[i] -= 1
+
+#             # calculate sum after fixing
+#             # a particular char
+#             xsum = fact[length - 1 - k]
+#             for j in range(0, MAX_CHAR):
+#                 xsum = xsum // fact[freq[j]]
+#             Sum += xsum
+
+#             # if sum > n fix that char as
+#             # present char and update sum
+#             # and required nth after fixing
+#             # char at that position
+#             if Sum >= n:
+#                 out[k] = i
+#                 n -= Sum - xsum
+#                 k += 1
+#                 break
+
+#             # if sum < n, add character back
+#             if Sum < n:
+#                 freq[i] += 1
+
+#     # if sum == n means this char will provide
+#     # its greatest permutation as nth permutation
+#     i = MAX_CHAR-1
+#     while k < length and i >= 0:
+#         if freq[i]:
+#             out[k] = i
+#             freq[i] -= 1
+#             i += 1
+#             k += 1
+
+#         i -= 1
+
+#     # print result
+#     return out[:k]
 
 
-print(nPermute(list(range(10)), 100000))
+# print(nPermute(list(range(10)), 100000))
