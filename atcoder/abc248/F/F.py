@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
 import io, os, sys
 from sys import stdin, stdout
@@ -18,40 +18,47 @@ from functools import lru_cache
 
 ### CODE HERE
 
-N, P = read_int_tuple()
+sys.setrecursionlimit(10000)
 
-def ans(i, d, has_leak):
-
-    # number of subgraphs of [0...i] with given missing edges
-
-    if d < 0: return 0
-    if i == 0:
-        if d == 1 and has_leak:
-            return 1
-        if d == 0 and not has_leak:
-            return 1
+@lru_cache(None)
+def ans(target_d, i, has_leak, two_parts):
+    if target_d < 0: return 0
+    if i == N-1:
+        if two_parts: return 0
+        if target_d == 0: return 1
         return 0
 
     ret = 0
 
     # add a complete cap
-    ret += ans(i-1, d, False)
+    ret += ans(target_d, i+1, False, False)
     # add a _|
-    ret += 2*ans(i-1, d-1, False)
+    if not two_parts:
+        ret += 2*ans(target_d-1, i+1, False, False)
 
     # add a =
-    ret += ans(i-1, d-1, has_leak)
+    ret += ans(target_d-1, i+1, has_leak, two_parts)
 
 
-    # add a leak
-    if has_leak:
-        ret += 2*ans(i-1, d-2, True)
+    # add a _
+    if (not has_leak) and (not two_parts):
+        ret += 2*ans(target_d-2, i+1, True, True)
 
-    return ret
+    return ret % MODULUS
 
-# print(ans(N-1, 0, True) + ans(N-1, 1, False))
+if True:
+    N, MODULUS = read_int_tuple()
+else:
+    N, MODULUS = 16, 999999937
 
-print(ans(N-2, 2, False))
-# print(ans(N-1, 1, True) + ans(N-1, 2, False))
+ret = []
+for d in range(1, N):
+    a = ans(d-1, 0, True, True)
+    b = ans(d, 0, False, False)
+    ret += [(a+b) % MODULUS]
 
-# print(ans(N-1, 2, True) + ans(N-1, 3, False))
+print(*ret)
+
+# print(ret)
+if ret == 16:
+    assert(" ".join(map(str, ret)) == "46 1016 14288 143044 1079816 6349672 29622112 110569766 330377828 784245480 453609503 38603306 44981526 314279703 408855776")
