@@ -16,7 +16,7 @@ int colour[100009];
 vector<int> neighbours[100009];
 int is_good[100009];
 
-unordered_map<int, int> ancestors;
+map<int, int> ancestors;
 
 void dfs0(int u, int parent) {
 
@@ -32,6 +32,8 @@ void dfs0(int u, int parent) {
 }
 
 int main() {
+
+  ios_base::sync_with_stdio(false); cin.tie(NULL);
 
   cin >> N;
   for (int i=0; i<N; i++) cin >> colour[i];
