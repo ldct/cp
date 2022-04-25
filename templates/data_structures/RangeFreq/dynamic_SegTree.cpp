@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// TLE on https://judge.yosupo.jp/problem/static_range_frequency
+// 2.5s to construct the tree for 2e5 elements
+
 class SegTreeFreq {
 public:
   unique_ptr<SegTreeFreq> lTree;
@@ -44,35 +47,33 @@ public:
 //     }
 //   }
 
-  int rangeFreq(long long ofElement) { return freq[ofElement]; }
-  int rangeFreq(long long ofElement, int l, int r) {
+  int rangeFreq(long long target) { return freq[target]; }
+  int rangeFreq(long long target, int l, int r) {
     // entirely disjoint
     if (rightmost < l || r < leftmost) { return 0; }
     // covers
-    if (l <= leftmost && rightmost <= r) { return freq[ofElement]; }
+    if (l <= leftmost && rightmost <= r) { return freq[target]; }
     // delegate to children
-    return lTree->rangeFreq(ofElement, l, r) + rTree->rangeFreq(ofElement, l, r);
+    return lTree->rangeFreq(target, l, r) + rTree->rangeFreq(target, l, r);
   }
 };
 
 int main() {
+
   int N, Q;
   cin >> N >> Q;
-  vector<long long>A(N, 0);
-  for (int i=0; i<N; i++) {
-    int a;
+  vector<long long> arr;
+  while (N --> 0) {
+    long long a;
     cin >> a;
-    A[i] = a;
+    arr.push_back(a);
   }
-  auto s = SegTreeFreq(A);
-  for (int i=0; i<Q; i++) {
-    int a, b, c;
-    cin >> a >> b >> c;
-    if (a == 0) {
-      s.pointIncrement(b, c);
-    } else {
-      cout << s.rangeSum(b, c-1) << endl;
-    }
+  auto engine = SegTreeFreq(arr);
+  cout << "done" << endl; return 0;
+  while (Q --> 0) {
+    int l, r, x;
+    cin >> l >> r >> x;
+    cout << engine.rangeFreq(x, l, r-1) << endl;
   }
 
   return 0;
