@@ -81,14 +81,13 @@ def count_multiples(A, B, c):
     return B//c - (A-1)//c
 
 def divisors(n):
-    large_divisors = []
+    ret = []
     for i in range(1, int(math.sqrt(n) + 1)):
         if n % i == 0:
-            yield i
+            ret += [i]
             if i*i != n:
-                large_divisors.append(n / i)
-    for divisor in reversed(large_divisors):
-        yield divisor
+                divisors += [n / i]
+    return ret
 
 def s0(n):
     ret = 0

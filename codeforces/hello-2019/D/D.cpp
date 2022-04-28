@@ -5,8 +5,7 @@ using namespace std;
 #define i32 int32_t
 #define i64 int64_t
 
-unordered_map<int, vector<int>> memo1;
-map<pair<int, int>, double> memo2;
+// todo: try hashmap memoization
 
 namespace io_aux {
   template<class T1, class T2> ostream& operator << (ostream& os, const pair<T1,T2>& v) { return os << "(" << v.first << ", " << v.second << ")"; }
@@ -18,57 +17,101 @@ namespace io_aux {
   template<class C, class T, class... A> auto operator<<(basic_ostream<C, T>& os, tuple<A...> const& t) -> basic_ostream<C, T>& { os << "("; aux::pt(os, t, aux::gs<sizeof...(A)>()); return os << ")"; }
 } using namespace io_aux;
 
-vector<int> get_divisors(int n) {
-  if (memo1.count(n)) return memo1[n];
-  // cout << n << endl;
-  vector<int> ret;
-  for (int i=1; i*i <= n; i++) {
-    if ((n % i) == 0) {
-      ret.push_back(i);
-      if (i * i != n) ret.push_back(n / i);
+constexpr int MODULUS = 1000000007;
+
+vector<int> PRIMES;
+
+long long modexp(long long b, long long e) {
+	long long ans = 1;
+	for (; e; b = b * b % MODULUS, e /= 2)
+		if (e & 1) ans = ans * b % MODULUS;
+	return ans;
+}
+
+long long modinv(int a, int b) {
+	int b0 = b, t, q;
+	int x0 = 0, x1 = 1;
+	if (b == 1) return 1;
+	while (a > 1) {
+		q = a / b;
+		t = b, b = a % b, a = t;
+		t = x0, x0 = x1 - q * x0, x1 = t;
+	}
+	if (x1 < 0) x1 += b0;
+	return x1;
+}
+
+int N, K;
+
+int memo[50][50][10009];
+
+int ans_pe(int p, int e, int k) {
+  if (memo[p][e][k] != -1) return memo[p][e][k];
+
+  if (k == 0) return modexp(PRIMES[p], e);
+  vector<int> ep;
+  for (int f=0; f<=e; f++) {
+    ep.push_back(ans_pe(p, f, k-1));
+  }
+  int ret = 0;
+  for (auto r : ep) {
+    ret += r;
+    ret %= MODULUS;
+  }
+  ret *= modinv(ep.size(), MODULUS);
+  ret %= MODULUS;
+  return memo[p][e][k] = ret;
+}
+
+pair<vector<int>, vector<int>> factorize(int n) {
+  vector<int> primes;
+  vector<int> exponents;
+  int p = 2;
+  while (n > 1) {
+    if (p * p > n) {
+      primes.push_back(n);
+      exponents.push_back(1);
+      return {primes, exponents};
     }
+    int e = 0;
+    while (n % p == 0) {
+      n /= p;
+      e++;
+    }
+    if (e > 0) {
+      primes.push_back(p);
+      exponents.push_back(e);
+    }
+    p++;
   }
-  // return ret;
-  return memo1[n] = ret;
+  return {primes, exponents};
 }
 
-double ans(int x, int k) {
-  if (x == 1) return 1;
-  if (k == 0) return double(x);
+int ans(int n, int k) {
+  auto f = factorize(n);
+  // cout << f.first << endl;
+  // cout << f.second << endl;
+  PRIMES = f.first;
 
-  pair<int, int> key = {x, k};
+  // cout << PRIMES << endl;
 
-  if (memo2.count(key)) return memo2[key];
-
-  auto divisors = get_divisors(x);
-  double a = 0;
-  int b = 0;
-  for (auto d : divisors) {
-    auto r = ans(d, k-1);;
-    a += r;
-    b += 1;
+  int ret = 1;
+  for (int i=0; i<f.first.size(); i++) {
+    auto p = f.first[i];
+    auto e = f.second[i];
+    ret *= ans_pe(i, e, k);
+    ret %= MODULUS;
   }
-  return memo2[key] = a / double(b);
+  return ret;
 }
-
 
 i32 main() {
 
-  int N = 866421317361600;
+  memset(memo, -1, sizeof(memo));
 
-  auto divisors = get_divisors(N);
-
-  int r = 0;
-
-  // for (auto a : divisors) {
-  //   for (int i=1; i*a <= N; i++) {
-  //     r++;
-  //   }
-  // }
-
-  cout << r << endl;
+  int N, K;
+  cin >> N >> K;
+  cout << ans(N, K) << endl;
 
   return 0;
 }
-
-// DO NOT USE FOR INTERACTIVE PROBLEMS
