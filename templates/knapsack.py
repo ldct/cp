@@ -16,7 +16,7 @@ def ss_ncp(target, B):
     possible = array.array('b', [1] + [0]*target)
 
     for b in B:
-        for mass in range(M, -1, -1):
+        for mass in range(target, -1, -1):
             if possible[mass] == 1 and mass + b <= target:
                 possible[mass+b] = 1
     return possible

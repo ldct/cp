@@ -76,6 +76,7 @@ def ans_slow(A, B):
 
 if True:
     A, B = [2, 3, 2, 1, 2], [3, 2, 1, 2, 2]
+    print(ans_slow(A, B))
     print(ans(A, B))
 elif True:
     import random
