@@ -32,22 +32,34 @@ def del_indexes(A, indexes):
 
 def ans(A, B):
 
-    U = set(A)
-    Ai = indexes(A)
-    Bi = indexes(B)
+    A = A[::-1]
+    B = B[::-1]
 
-    A_del = []
-    B_del = []
-    for e in U:
-        assert(len(Ai[e]) == len(Bi[e]))
-        for i in range(len(Bi[e])-1):
-            if Bi[e][i]+1 == Bi[e][i+1]:
-                B_del += [Bi[e][i]]
-                A_del += [Ai[e][i]]
+    reserve = defaultdict(int)
 
-    A = del_indexes(A, A_del)
-    B = del_indexes(B, B_del)
-    return A == B
+    i = 0
+    j = 0
+
+    while True:
+        if j == len(A): return True
+        if A[i] == B[j]:
+            i += 1
+            j += 1
+            continue
+
+        if 0 < j < len(B) and B[j] == B[j-1]:
+            reserve[B[j]] += 1
+            j += 1
+            continue
+
+        if i < j and reserve[A[i]] > 0:
+            reserve[A[i]] -= 1
+            i += 1
+            continue
+
+        return False
+
+
 
 def squish(arr, i, j):
     arr = list(arr)
@@ -74,14 +86,14 @@ def bfs(arr):
 def ans_slow(A, B):
     return tuple(B) in bfs(A)
 
-if True:
+if False:
     A, B = [2, 3, 2, 1, 2], [3, 2, 1, 2, 2]
     print(ans_slow(A, B))
     print(ans(A, B))
-elif True:
+elif False:
     import random
-    for _ in range(10000):
-        A = [random.randint(1, 3) for _ in range(5)]
+    for _ in range(100000):
+        A = [random.randint(1, 5) for _ in range(10)]
         B = A[:]
         random.shuffle(B)
         if not (ans(A, B) == ans_slow(A, B)):
@@ -92,4 +104,4 @@ elif True:
         input()
         A = read_int_list()
         B = read_int_list()
-        print("YES" if ans_slow(A, B) else "NO")
+        print("YES" if ans(A, B) else "NO")

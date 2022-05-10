@@ -18,12 +18,25 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def bad(s):
+
+    if ''.join(sorted(s)) != s: return True
+    if 'A' not in s: return True
+    if 'B' not in s: return True
+    if s.count('A') < s.count('B'): return True
+    return False
+
 def ans(S):
-    if S[0] == "B": return "NO"
-    if "BB" in S: return "NO"
-    if len(S) == 1: return "NO"
-    if "B" not in S: return "NO"
-    if S[-1] == "A": return "NO"
+    if S[-1] != "B": return "NO"
+    cnt = 0
+    for c in S:
+        if c == "B":
+            cnt -= 1
+        else:
+            cnt += 1
+        if cnt < 0:
+            return "NO"
+
     return "YES"
 
 for _ in range(read_int()):
