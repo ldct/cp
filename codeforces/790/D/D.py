@@ -18,5 +18,25 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(n, m, grid):
+    score_pos = defaultdict(int)
+    score_neg = defaultdict(int)
+
+    for i in range(n):
+        for j in range(m):
+            score_pos[i+j] += grid[i][j]
+            score_neg[i-j] += grid[i][j]
+
+    ret = 0
+
+    for i in range(n):
+        for j in range(m):
+            candidate = score_pos[i+j] + score_neg[i-j] - grid[i][j]
+            ret = max(ret, candidate)
+
+    return ret
+
 for _ in range(read_int()):
-    pass
+    n, m = read_int_tuple()
+    grid = [read_int_list() for _ in range(n)]
+    print(ans(n, m, grid))

@@ -18,5 +18,9 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(S):
+    S = list(map(int, S))
+    return sum(S[0:3]) == sum(S[3:])
+
 for _ in range(read_int()):
-    pass
+    print("YES" if ans(input()) else "NO")

@@ -18,5 +18,21 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(A, queries):
+    A = sorted(A)[::-1]
+    p = [0]
+    for a in A:
+        p += [p[-1] + a]
+
+    for q in queries:
+        r = bisect_left(p, q)
+        if r == len(p):
+            r = -1
+        print(r)
+
 for _ in range(read_int()):
-    pass
+    n, q = read_int_tuple()
+    A = read_int_list()
+    queries = [read_int() for _ in range(q)]
+
+    ans(A, queries)

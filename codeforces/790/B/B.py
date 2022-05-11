@@ -18,5 +18,9 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(A):
+    return sum(A) - len(A)*min(A)
+
 for _ in range(read_int()):
-    pass
+    input()
+    print(ans(read_int_list()))

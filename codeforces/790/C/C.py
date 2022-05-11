@@ -18,5 +18,23 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def dc(a, b):
+    a = ord(a)
+    b = ord(b)
+    return abs(a - b)
+
+def dist(A, B):
+    return sum(dc(a, b) for (a, b) in zip(A, B))
+
+def ans(strings):
+    ret = float("inf")
+    for i in range(len(strings)):
+        for j in range(i+1, len(strings)):
+            ret = min(ret, dist(strings[i], strings[j]))
+
+    return ret
+
 for _ in range(read_int()):
-    pass
+    n, m = read_int_tuple()
+    strings = [input() for _ in range(n)]
+    print(ans(strings))
