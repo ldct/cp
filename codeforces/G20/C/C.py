@@ -18,5 +18,49 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def rle_block(arr):
+    last_e = None
+    last_n = 0
+    last_i = -1
+
+    ret = []
+    for i, c in enumerate(arr):
+        if c != last_e:
+            if last_n > 0:
+                ret += [(last_i, [last_e]*last_n)]
+            last_e = c
+            last_n = 1
+            last_i = i
+        else:
+            last_n += 1
+
+    ret += [(last_i, [last_e]*last_n)]
+    return ret
+
+def ans_seg(l):
+    if l == 2: return 0
+    if l == 3: return 1
+    return l - 3
+
+def ans(arr):
+    arr = [(a, len(b)) for (a, b) in rle_block(arr) if len(b) > 1]
+    if len(arr) == 0:
+        return 0
+    if len(arr) == 1:
+        _, l = arr[0]
+        return ans_seg(l)
+
+    (a, l_a) = arr[0]
+    (b, l_b) = arr[-1]
+    assert(a != b)
+
+    end = b + l_b
+    l = end - a
+    return ans_seg(l)
+
+
+    return arr
+
 for _ in range(read_int()):
-    pass
+    input()
+    print(ans(read_int_list()))

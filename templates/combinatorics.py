@@ -11,9 +11,17 @@ print(list(subsets([1,2,3], 2, 2)))
 
 def subsequences(S):
     ret = []
-    for indices in range(subsets(range(len(S)))):
-        ret += [S[i] for i in indices]
+    for indices in subsets(range(len(S))):
+        ret += [[S[i] for i in indices]]
     return ret
+
+def is_subsequence(needle, haystack):
+    current_pos = 0
+    for c in needle:
+        current_pos = find(haystack, c, current_pos) + 1
+        if current_pos == 0:
+            return False
+    return True
 
 ## shim for math.comb
 def comb(n, r):
