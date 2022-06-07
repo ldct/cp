@@ -38,6 +38,21 @@ class Sieve:
 
         return ret
 
+    def fastfactorize_counter(self, n):
+        assert(n <= self.N)
+
+        ret = Counter()
+
+        while self.s[n] != -1:
+            p = self.s[n]
+            ret[p] += 1
+            n = n // self.s[n]
+
+        if n > 1:
+            ret[n] += 1
+
+        return ret
+
     def isprime(self, n):
         if n < self.N:
             return self.s[n] == -1
