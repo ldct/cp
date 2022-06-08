@@ -18,5 +18,23 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(K, cells):
+    cells = [(1 if cells[i] == 'B' else 0) for i in range(len(cells))]
+
+    candidates = []
+
+    rs = sum(cells[0:K])
+    candidates += [rs]
+
+    for i in range(len(cells) - K):
+        rs -= cells[i]
+        rs += cells[K+i]
+        candidates += [rs]
+
+    return K - max(candidates)
+
 for _ in range(read_int()):
-    pass
+    N, K = read_int_tuple()
+    cells = input()
+
+    print(ans(K, cells))

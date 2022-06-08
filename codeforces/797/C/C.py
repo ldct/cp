@@ -18,5 +18,24 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(S, F):
+
+    free_time = 0
+
+    tst = []
+
+    for i in range(len(S)):
+        s, f = S[i], F[i]
+
+        tst += [max(free_time, s)]
+
+        free_time = f
+
+    durations = [F[i] - tst[i] for i in range(len(S))]
+    return durations
+
 for _ in range(read_int()):
-    pass
+    input()
+    S = read_int_list()
+    F = read_int_list()
+    print(*ans(S, F))

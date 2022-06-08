@@ -18,5 +18,18 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(A, B):
+    gap = max(a - b for (a, b) in zip(A, B))
+
+    if gap < 0: return "NO"
+    A = [max(0, a - gap) for a in A]
+
+    if A == B: return "YES"
+    return "NO"
+    return A, B, gap
+
 for _ in range(read_int()):
-    pass
+    input()
+    A = read_int_list()
+    B = read_int_list()
+    print(ans(A, B))

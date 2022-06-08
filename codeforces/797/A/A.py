@@ -18,5 +18,28 @@ from functools import lru_cache
 
 ### CODE HERE
 
+def ans(n):
+
+    a, b, c = n+1, n+2, n
+
+    e = ((a + b + c) - n) // 3
+
+    a -= e
+    b -= e
+    c -= e
+    
+    while (a + b + c) - n > 3:
+        a -= 1
+        b -= 1
+        c -= 1
+
+    while (a + b + c) != n:
+        if c > 1:
+            c -= 1
+        elif a > 1:
+            a -= 1
+
+    print(a, b, c)
+
 for _ in range(read_int()):
-    pass
+    ans(read_int())
