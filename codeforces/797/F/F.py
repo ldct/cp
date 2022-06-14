@@ -45,26 +45,30 @@ def lcm(lst):
 	return ret
 
 def cost(cyc):
-    p = deque(cyc)
+  cyc = ''.join(cyc)
+  haystack = (cyc + cyc)[1:]
+  return 1 + haystack.index(cyc)
+  print(cyc)
+  p = deque(cyc)
 
-    ret = 0
-    while True:
-        ret += 1
-        x = p.popleft()
-        p.append(x)
+  ret = 0
+  while True:
+      ret += 1
+      x = p.popleft()
+      p.append(x)
 
-        if list(p) == cyc: return ret
+      if list(p) == cyc: return ret
 
 def ans(S, P):
-    P = [p-1 for p in P]
-    cp = cycles(P)
-    cp = [[S[i] for i in cyc] for cyc in cp]
-    cp = [cost(cyc) for cyc in cp]
+  P = [p-1 for p in P]
+  cp = cycles(P)
+  cp = [[S[i] for i in cyc] for cyc in cp]
+  cp = [cost(cyc) for cyc in cp]
 
-    return lcm(cp)
+  return lcm(cp)
 
 for _ in range(read_int()):
-    input()
-    S = input()
-    P = read_int_list()
-    print(ans(S, P))
+  input()
+  S = input()
+  P = read_int_list()
+  print(ans(S, P))
