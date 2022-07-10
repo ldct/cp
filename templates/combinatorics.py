@@ -53,3 +53,28 @@ def count_partitions_interval(n, N, l=0, r=None):
     for q in range(0, 1+UB):
         ret += (-1)**q * comb(n, q) * comb(N - q*(r+1) + n-1, n-1)
     return ret
+
+def cost(word):
+    """
+    Smallest number of cyclic shifts to make the word equal to the starting value
+    cost("abcd") == 4
+    cost("abab") == 2
+    """    
+    word = ''.join(word)
+    haystack = (word + word)[1:]
+    return 1 + haystack.index(word)
+
+def cycles(perm):
+    remain = set(perm)
+    result = []
+    while len(remain) > 0:
+        n = remain.pop()
+        cycle = [n]
+        while True:
+            n = perm[n]
+            if n not in remain:
+                break
+            remain.remove(n)
+            cycle.append(n)
+        result.append(cycle)
+    return result

@@ -17,19 +17,19 @@ from bisect import bisect_left
 from functools import lru_cache
 
 def cycles(perm):
-  remain = set(perm)
-  result = []
-  while len(remain) > 0:
-    n = remain.pop()
-    cycle = [n]
-    while True:
-      n = perm[n]
-      if n not in remain:
-        break
-      remain.remove(n)
-      cycle.append(n)
-    result.append(cycle)
-  return result
+    remain = set(perm)
+    result = []
+    while len(remain) > 0:
+        n = remain.pop()
+        cycle = [n]
+        while True:
+            n = perm[n]
+            if n not in remain:
+                break
+            remain.remove(n)
+            cycle.append(n)
+        result.append(cycle)
+    return result
 
 ### CODE HERE
 
@@ -48,16 +48,6 @@ def cost(cyc):
   cyc = ''.join(cyc)
   haystack = (cyc + cyc)[1:]
   return 1 + haystack.index(cyc)
-  print(cyc)
-  p = deque(cyc)
-
-  ret = 0
-  while True:
-      ret += 1
-      x = p.popleft()
-      p.append(x)
-
-      if list(p) == cyc: return ret
 
 def ans(S, P):
   P = [p-1 for p in P]
