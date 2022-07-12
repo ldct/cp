@@ -1,4 +1,5 @@
 
+# tag:rmq range minimum sparse table
 class Sparse1:
     def __init__(self, arr):
         self._arr = arr[:]
