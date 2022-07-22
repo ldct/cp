@@ -5,6 +5,10 @@
 #include <set>
 #include <algorithm>
 #include <queue>
+#include <array>
+
+// #include <bits/stdc++.h>
+
 
 using namespace std;
 
@@ -22,51 +26,136 @@ namespace io_aux {
   template<class C, class T, class... A> auto operator<<(basic_ostream<C, T>& os, tuple<A...> const& t) -> basic_ostream<C, T>& { os << "("; aux::pt(os, t, aux::gs<sizeof...(A)>()); return os << ")"; }
 } using namespace io_aux;
 
-struct Trie { // 32-bit, >= 0
-  int size = 0;
-  int leaf = -1;
-  Trie* zeros = nullptr;
-  Trie* ones = nullptr;
-  void insert(int word, int idx) {
-    size++;
-    if (idx == -1) {
-      leaf = word;
-      return;
+int highest_bit(uint64_t x) {
+    return x == 0 ? -1 : 63 - __builtin_clzll(x);
+}
+ 
+template<int ALPHABET = 2>
+struct BinaryTrie {
+    struct trie_node {
+        array<int, ALPHABET> child;
+        int words = 0, starts_with = 0;
+ 
+        trie_node() {
+            memset(&child[0], -1, ALPHABET * sizeof(int));
+        }
+    };
+ 
+    static const int ROOT = 0;
+ 
+    vector<trie_node> nodes = {trie_node()};
+ 
+    BinaryTrie(int total_length = -1) {
+        if (total_length >= 0)
+            nodes.reserve(total_length + 1);
     }
-    int bit = (1 << idx) & word;
-    if (bit == 0) {
-      if (!zeros) zeros = new Trie;
-      zeros->insert(word, idx-1);
-    } else {
-      if (!ones) ones = new Trie;
-      ones->insert(word, idx-1);
+ 
+    int get_or_create_child(int node, int c) {
+        if (nodes[node].child[c] < 0) {
+            nodes[node].child[c] = int(nodes.size());
+            nodes.emplace_back();
+        }
+ 
+        return nodes[node].child[c];
     }
-  }
-  bool contains(int word, int idx) {
-    if (size == 0) return false;
-    if (idx == -1) {
-      return false;
+ 
+    int build(uint64_t word, int delta) {
+        int node = ROOT;
+ 
+        for (int bit = highest_bit(word); bit >= 0; bit--) {
+            nodes[node].starts_with += delta;
+            node = get_or_create_child(node, int(word >> bit & 1));
+        }
+ 
+        nodes[node].starts_with += delta;
+        return node;
     }
-    int bit = (1 << idx) & word;
-    if (bit == 0) {
-      if (zeros) {
-        return zeros->contains(word, idx-1);
-      } else {
-        return false;
-      }
-    } else {
-      if (ones) {
-        return ones->contains(word, idx-1);
-      } else {
-        return false;
-      }
+ 
+    int add(uint64_t word) {
+        int node = build(word, +1);
+        nodes[node].words++;
+        return node;
     }
-  }
-  void insert(int word) { insert(word, popcount(word)-1); }
-  bool contains(int word) { return contains(word, popcount(word)-1); }
+ 
+    int erase(uint64_t word) {
+        int node = build(word, -1);
+        nodes[node].words--;
+        return node;
+    }
 
+    int down(int node) {
+      return node;
+      while (nodes[node].starts_with > nodes[node].words) {
+        node = nodes[node].child[0];
+      }
+      return node;
+    }
+ 
+    int find(uint64_t query) const {
+        int node = ROOT;
+ 
+        for (int bit = highest_bit(query); bit >= 0; bit--) {
+            node = nodes[node].child[query >> bit & 1];
+ 
+            if (node < 0)
+                break;
+        }
+ 
+        return node;
+    }
+ 
+    // Given a string, how many words in the trie are prefixes of the string?
+    int count_prefixes(uint64_t query, bool include_full) const {
+        int node = ROOT, count = 0;
+ 
+        for (int bit = highest_bit(query); bit >= 0; bit--) {
+            count += nodes[node].words;
+            node = nodes[node].child[query >> bit & 1];
+ 
+            if (node < 0)
+                break;
+        }
+ 
+        if (include_full && node >= 0)
+            count += nodes[node].words;
+ 
+        return count;
+    }
+ 
+    // Given a string, how many words in the trie start with the given string?
+    int count_starts_with(uint64_t query, bool include_full) const {
+        int node = find(query);
+ 
+        if (node < 0)
+            return 0;
+ 
+        return nodes[node].starts_with - (include_full ? 0 : nodes[node].words);
+    }
 };
 
+void ans(vector<int>& A, vector<int>& B) {
+    BinaryTrie S;
+
+    for (auto b : B) {
+      S.add(b);
+    }
+
+    sort(A.rbegin(), A.rend());
+
+    // cout << A << B << endl;
+
+    for (auto a : A) {
+ 
+        if (S.count_starts_with(a, true)<= 0) {
+          cout << "NO" << '\n';
+          return;
+        }
+ 
+        S.erase(S.find(a));
+
+    }
+    cout << "YES" << endl;
+}
 int main() {
 
   int T;
@@ -90,24 +179,7 @@ int main() {
       B.push_back(b);
     }
 
-    cout << A << B << endl;
-
-    Trie S;
-
-    for (auto b : B) {
-      S.insert(b);
-    }
-
-    sort(A.begin(), A.end());
-    reverse(A.begin(), A.end());
-    
-
-    cout << S.size << endl;
-    cout << S.zeros << endl;
-    cout << S.ones << endl;
-
-    cout << A << endl;
-    cout << "S.contains(1)" << S.contains(1) << endl;
+    ans(A, B);
   }
 
   return 0;
