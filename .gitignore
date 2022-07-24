@@ -10,3 +10,4 @@ venv/*
 advent_of_code/*
 kattis/
 *.big.in
+dmoj/math/
