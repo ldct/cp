@@ -19,33 +19,48 @@ import random
  
 ### CODE HERE
 
+import sys
+
 class TrieNode:
-    def __init__(self, path):
+    __slots__ = 'num_words', 'starts', 'child0', 'child1'
+
+    def __init__(self):
+        
+        # getsizeof()=40
+
         self.num_words = 0
         self.starts = 0
-        self.children= dict()
-        self.path = path
+
+        self.child0 = None
+        self.child1 = None
 
     def anyChild(self):
-        for k in self.children:
-            if self.children[k].starts > 0:
-                return self.children[k]
+        if self.child0 is not None and self.child0.starts > 0:
+            return self.child0
+        if self.child1 is not None and self.child1.starts > 0:
+            return self.child1
 
-class Trie:
+class BinaryTrie:
     def __init__(self):
-        self.root = TrieNode("")
+
+        self.root = TrieNode()
 
     def insert(self, word):
+        word = list(map(int, word))
         node=self.root
         for i in word:
             node.starts += 1
-            if i not in node.children:
-                node.children[i]=TrieNode(node.path+i)
-            node=node.children[i]
+
+            if i == 0 and node.child0 is None: node.child0 = TrieNode()
+            if i == 1 and node.child1 is None: node.child1 = TrieNode()
+
+            node = node.child0 if i == 0 else node.child1
         node.num_words += 1
         node.starts += 1
 
     def findAnyWithPrefix(self, prefix):
+        prefix = list(map(int, prefix))
+
         node = self.findNode(prefix)
         if node is None:
             return node
@@ -56,29 +71,30 @@ class Trie:
         return node
 
     def containsWord(self, word):
+        word = list(map(int, word))
         node = self.findNode(word)
         if node is None: return False
         return node.num_words > 0
 
     def remove(self, word):
-        # if not (self.containsWord(word)):
-        #     assert(False)
+        word = list(map(int, word))
         node=self.root
         node.starts -= 1
         for i in word:
-            if i not in node.children:
-                return None
-            node=node.children[i]
+            if i == 0 and node.child0 is None: return None
+            if i == 1 and node.child1 is None: return None
+
+            node = node.child0 if i == 0 else node.child1
+
             node.starts -= 1
         node.num_words -= 1
 
     def removeAnyWithPrefix(self, prefix):
+        prefix = list(map(int, prefix))
         node=self.root
         for i in prefix:
             node.starts -= 1
-            node=node.children[i]
-
-        # assert(node.path == prefix)
+            node = node.child0 if i == 0 else node.child1
 
         if node.num_words > 0:
             node.starts -= 1
@@ -94,23 +110,23 @@ class Trie:
         node.num_words -= 1
 
     def findNode(self, word):
+        word = list(map(int, word))
+        
         node=self.root
         for i in word:
-            if i not in node.children:
-                return None
-            node=node.children[i]
+            if i == 0 and node.child0 is None: return None
+            if i == 1 and node.child1 is None: return None
+
+            node = node.child0 if i == 0 else node.child1
+
         return node
 
     def startsWith(self, prefix):
+        prefix = list(map(int, prefix))
+
         node = self.findNode(prefix)
         if node is None: return False
         return node.starts > 0
-        
-
-# for k in words:
-#     while words[k] > 0:
-#         words[k] -= 1
-#         trie.remove(k)
 
  
 def clean(arr):
@@ -132,7 +148,7 @@ def ans(A, B):
     A = [bin(x) for x in A]
     B = [bin(x) for x in B]
 
-    t = Trie()
+    t = BinaryTrie()
 
     for b in B:
         t.insert(b)
@@ -147,26 +163,10 @@ def ans(A, B):
          
     return "YES"
  
-if False:
-    trie = Trie()
-    trie.insert("somewhere")
-    trie.removeAnyWithPrefix("some")
-    print(trie.root.starts)
-elif False:
-    A = [6, 6]
-    B = [6, 9]
-    print(ans(A, B))
-elif False:
-    for _ in range(1000000):
-        N = random.randint(2, 2)
-        A = [random.randint(1, 10) for _ in range(N)]
-        B = [random.randint(1, 10) for _ in range(N)]
-        print(A, B)
-        print(ans(A, B))
-else:
-    for _ in range(read_int()):
-        input()
-        A = read_int_list()
-        B = read_int_list()
 
-        print(ans(A, B))
+for _ in range(read_int()):
+    input()
+    A = read_int_list()
+    B = read_int_list()
+
+    print(ans(A, B))
