@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
 from sys import stdin, stdout
 
@@ -105,6 +105,8 @@ def ans_one(A, C):
 
     S = Sparse2(A)
 
+    print(S._mat)
+
     ret = float("inf")
     for i in range(N):
         for j in range(M):
@@ -122,7 +124,7 @@ def ans(A, C):
     ret = min(ret, ans_one(A, C))
     return ret
 
-if True:
+if False:
     import random
     H = 1000
     W = 1000
