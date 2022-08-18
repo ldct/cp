@@ -18,6 +18,9 @@ from functools import lru_cache
 
 # 1091ms on https://judge.yosupo.jp/problem/static_range_frequency
 
+# tag: range frequency query
+# query: range frequency
+
 class RangeFreq():
     def __init__(self, arr):
         self.store = defaultdict(list)
