@@ -50,6 +50,8 @@ typedef struct _ap2 {
   }
 } ap2;
 
+ap2 range_of[MAX_N];
+
 ap2 make(int k, int l, int r) {
   ap2 ret;
   ret.kind = k;
@@ -60,7 +62,7 @@ ap2 make(int k, int l, int r) {
 
 ap2 single(int x) {
   return make(
-    x%2, x, x
+    ((x%2)+2)%2, x, x
   );
 }
 
@@ -83,7 +85,6 @@ ap2 flip(ap2 a) {
 }
 
 ap2 dfs(int u, int parent) {
-  
   ap2 ret = make(2, -1, -1);
   if (ans[u] != -1) ret = single(ans[u]);
 
@@ -91,7 +92,38 @@ ap2 dfs(int u, int parent) {
     if (v == parent) continue;
     ret = merge(ret, flip(dfs(v, u)));
   }
-  return ret;
+  return range_of[u] = ret;
+}
+
+int choose(ap2 r) {
+  return r.left;
+}
+
+void dfs2(int u, int parent) {
+  if (ans[u] == -1) {
+    if (u == -3) {
+      cout << "hi" << endl;
+      cout << ans[parent] << endl;
+      range_of[u].pprint();
+      auto s = single(ans[parent]);
+      auto m = merge(
+        flip(s),
+        range_of[u]
+      );
+      cout << "s="; s.pprint();
+      m.pprint();
+      cout << endl;
+    }
+    auto m = merge(
+      flip(single(ans[parent])),
+      range_of[u]
+    );
+      ans[u] = choose(m);
+  }
+
+  for (auto v : children[u]) {
+    if (v != parent) dfs2(v, u);
+  }
 }
 
 i32 main() {
@@ -113,7 +145,27 @@ i32 main() {
   }
 
   auto r = dfs(1, 1);
-  r.pprint();
+  if (r.kind == -1) {
+    cout << "No" << endl;
+    return 0;
+  }
+
+  // for (int i=1; i<=N; i++) {
+  //   cout << i << " ";
+  //   range_of[i].pprint();
+  // }
+
+
+  if (ans[1] == -1) {
+    ans[1] = choose(r);
+  }
+
+  dfs2(1, 1);
+
+  cout << "Yes" << endl;
+  for (int i=1; i<=N; i++) {
+    cout << ans[i] << endl;
+  }
 
   return 0;
 }
