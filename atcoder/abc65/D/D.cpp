@@ -20,22 +20,22 @@ int N, K, L;
 vector<int> n1[MAX_N];
 vector<int> n2[MAX_N];
 
-short v1[MAX_N];
-short v2[MAX_N];
+int c1[MAX_N];
+int c2[MAX_N];
 
-void dfs1(int u) {
-  if (v1[u]) return;
+void dfs1(int u, int daddy) {
+  if (v1[u] != -1) return;
   cout << "visit " << u << endl;
   v1[u] = 1;
   for (auto v : n1[u]) {
-    dfs1(v);
+    dfs1(v, daddy);
   }
 }
 
 i32 main() {
 
-  memset(v1, 0, sizeof(v1));
-  memset(v2, 0, sizeof(v2));
+  memset(v1, -1, sizeof(v1));
+  memset(v2, -1, sizeof(v2));
 
   cin >> N >> K >> L;
   for (int i=0; i<K; i++) {
@@ -52,8 +52,13 @@ i32 main() {
     n2[q].push_back(p);
   } 
 
-  dfs1(1);
-  
+  for (int i=1; i<=N; i++) {
+    if (c1[i] == -1) dfs1(1, 1);
+  }
+
+  for (int i=1; i<=N; i++) {
+    cout << c1[i] << endl;
+  }  
 
   return 0;
 }
