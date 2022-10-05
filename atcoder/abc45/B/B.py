@@ -18,22 +18,15 @@ from functools import lru_cache
 
 ### CODE HERE
 
-def match(S, s):
-    if len(s) > len(S): return False
-    return S[-len(s):] == list(s)
+a = list(input()[::-1])
+b = list(input()[::-1])
+c = list(input()[::-1])
 
-def ans(S):
-    S = list(S)
-    while len(S):
-        matched = False
-        for word in ["dream", "dreamer", "erase", "eraser"]:
-            if match(S, word):
-                matched = True
-                for _ in word: S.pop()
-        if not matched:
-            return "NO"
+deck = {'a': a, 'b': b, 'c': c}
 
-    return "YES"
+p = 'a'
+while len(deck[p]):
+    p = deck[p].pop()
 
-S = input()
-print(ans(S))
+print(p.upper())
+

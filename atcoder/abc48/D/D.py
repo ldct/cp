@@ -18,22 +18,34 @@ from functools import lru_cache
 
 ### CODE HERE
 
-def match(S, s):
-    if len(s) > len(S): return False
-    return S[-len(s):] == list(s)
-
-def ans(S):
+def slow(S):
     S = list(S)
-    while len(S):
-        matched = False
-        for word in ["dream", "dreamer", "erase", "eraser"]:
-            if match(S, word):
-                matched = True
-                for _ in word: S.pop()
-        if not matched:
-            return "NO"
+    def move(S):
+        for i in range(1, len(S)-1):
+            if S[i-1] != S[i+1]: return i
 
-    return "YES"
+    num_moves = 0
+    while True:
+        i = move(S)
+        if i is None: break
+        num_moves += 1
+        del S[i]
 
-S = input()
-print(ans(S))
+    return num_moves % 2
+
+def fast(S):
+    if S[0] == S[-1]:
+        t = 3
+    else:
+        t = 2
+
+    return (len(S) - t) % 2
+
+if False:
+    import random
+    for _ in range(1000000):
+        tc = ''.join(random.choice("abcdef") for _ in range(5))
+        assert(slow(tc) == fast(tc))
+else:
+    S = list(input())
+    print("Second" if 0 == fast(S) else "First")

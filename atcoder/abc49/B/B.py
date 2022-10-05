@@ -18,22 +18,8 @@ from functools import lru_cache
 
 ### CODE HERE
 
-def match(S, s):
-    if len(s) > len(S): return False
-    return S[-len(s):] == list(s)
-
-def ans(S):
-    S = list(S)
-    while len(S):
-        matched = False
-        for word in ["dream", "dreamer", "erase", "eraser"]:
-            if match(S, word):
-                matched = True
-                for _ in word: S.pop()
-        if not matched:
-            return "NO"
-
-    return "YES"
-
-S = input()
-print(ans(S))
+H, W = read_int_tuple()
+for _ in range(H):
+    row = input()
+    print(row)
+    print(row)

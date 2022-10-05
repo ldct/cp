@@ -18,22 +18,10 @@ from functools import lru_cache
 
 ### CODE HERE
 
-def match(S, s):
-    if len(s) > len(S): return False
-    return S[-len(s):] == list(s)
+a, b, x = read_int_list()
 
-def ans(S):
-    S = list(S)
-    while len(S):
-        matched = False
-        for word in ["dream", "dreamer", "erase", "eraser"]:
-            if match(S, word):
-                matched = True
-                for _ in word: S.pop()
-        if not matched:
-            return "NO"
+def count_multiples(A, B, c):
+    # number of multiples of c in [A, B]
+    return B//c - (A-1)//c
 
-    return "YES"
-
-S = input()
-print(ans(S))
+print(count_multiples(a, b, x))
