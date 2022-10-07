@@ -2,8 +2,8 @@
 
 import random
 
-N = 20
-K = 20
+N = 4000
+K = 4000
 print(N, K)
 
 A = [random.randint(1, 10**9) for _ in range(N)]

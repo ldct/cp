@@ -28,28 +28,75 @@ def ss_ncp(target, B):
 
 ### CODE HERE
 
-N, K = read_int_tuple()
-A = read_int_list()
+def ans(K, A):
+    A.sort()
+    mA = max(A)
 
-A = [min(a, K+1) for a in A]
+    def ok(i):
+        # print("ok", i)
+        if i >= len(A): return False
 
-assert(N <= 400)
-assert(K <= 400)
+        T = K + 1
+        x = A[i]
+        B = list(A)
+        del B[i]
+        p = ss_ncp(T, B)
+        good = False
+        for w in range(len(p)):
+            if not p[w]: continue
+            if w < K <= w+x:
+                good = True
+        return not good
 
-ret = 0
+    for i in range(len(A)):
+        print(i, ok(i))
 
-for i in range(len(A)):
-    T = K + max(A)
-    x = A[i]
-    B = list(A)
-    del B[i]
-    p = ss_ncp(T, B)
-    good = False
-    for w in range(len(p)):
-        if not p[w]: continue
-        if w < K <= w+x:
-            good = True
-    if not good:
-        ret += 1
+    low = 0
+    high = len(A)
 
-print(ret)
+    if not ok(low):
+        return 0
+
+    assert(ok(low))
+    assert(not ok(high))
+
+
+    while high - low > 2:
+        mid = (low + high) // 2
+        if ok(mid):
+            low = mid
+        else:
+            high = mid
+
+    while ok(low):
+        low += 1
+
+    return low
+
+def assert_is_monotonic(arr):
+    check = True
+    for x in arr:
+        if check and not x:
+            check = False
+        assert(check == x)
+
+if True:
+    N, K = read_int_tuple()
+    A = read_int_list()
+
+    A = [min(a, K+1) for a in A]
+
+    ret = ans(K, A)
+    print(ret)
+
+else:
+    import random
+    for _ in range(10000):
+        N = random.randint(2, 10)
+        K = random.randint(1, 100)
+        A = [random.randint(1, K+1) for _ in range(N)]
+        A = [min(a, K+1) for a in A]
+        sng = set(ans(K, A))
+        arr = [x in sng for x in A]
+        print(arr)
+        assert_is_monotonic(arr)
