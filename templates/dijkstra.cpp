@@ -27,4 +27,4 @@ void dijkstra(long long N, long long s, vector<long long>& d, bool reverse) {
     }
 }
 
-  }
+}
