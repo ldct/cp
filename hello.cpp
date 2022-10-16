@@ -6,9 +6,9 @@
 #include <algorithm>
 #include <array>
 #include <cstring>
+#include <unordered_map>
 
 using namespace std;
-#define endl '\n'
 #define int long long
 #define i32 int32_t
 #define i64 int64_t
@@ -16,6 +16,8 @@ using namespace std;
 int N;
 
 i32 main() {
+
+  cin.tie(0);
 
   cin >> N;
   cout << N << endl;
