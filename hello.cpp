@@ -7,6 +7,7 @@
 #include <array>
 #include <cstring>
 #include <unordered_map>
+#include <cassert>
 
 using namespace std;
 #define int long long
