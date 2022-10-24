@@ -43,6 +43,7 @@ using vl = vector<ll>;
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 
+
 vi sa_is(const vi& s, int upper) {
   int n = sz(s); if (!n) return {};
   vi sa(n); vb ls(n); /// is suffix starting at i < suffix starting at i+1
@@ -123,42 +124,39 @@ vector<int> relative_order(string s) {
   return ret;
 }
 
-i64 merge_list(vector<int>& left, vector<int>& right) {
-  int i = 0; int j = 0; i64 inv_count = 0;
-  while (i < left.size() && j < right.size()) {
-    if (left[i] <= right[j]) {
-      i++;
-    } else {
-      j++;
-      inv_count += (long long)left.size();
-      inv_count -= (long long) i;
-    }
-  }
-  return inv_count;
-}
-
-int N;
-string S, T;
+string S;
 
 i32 main() {
 
-  cin >> N;
   cin >> S;
-  cin >> T;
+  int N = S.size();
 
-  string BS =  S + S + "$" + T + T + "~";
+  auto ro = relative_order(S+S);
 
-  auto ro = relative_order(BS);
+  int min_score = INT_MAX;
 
-  auto left = vector<int>(ro.begin(), ro.begin() + N);
-  auto right = vector<int>(ro.begin()+2*N+1, ro.begin() + 3*N+1);
+  for (int i=0; i<N; i++) {
+    min_score = min(min_score, ro[i]);
+  }
 
-  sort(left.begin(), left.end());
-  sort(right.begin(), right.end());
+  int argmin = 0;
+  for (int i=0; i<N; i++) {
+    if (ro[i] == min_score) {
+      argmin = i;
+    }
+  }
 
-  // cout << left << right << endl;
+  int idx = argmin;
 
-  cout << merge_list(right, left) << endl;
+  string ret;
+
+  for (int i=0; i<N; i++) {
+    int j = (i + idx) % N;
+    char c = S[j];
+    ret.push_back(c);
+  }
+
+  cout << ret << endl;
 
   return 0;
 }
